@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .settings-section,
+        .task-section {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .settings-section label,
+        .task-section label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .settings-section input,
+        .settings-section button,
+        .task-section input,
+        .task-section button,
+        .task-section textarea,
+        .task-section select {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .settings-section input {
+            flex-grow: 1;
+        }
+
+        .settings-section button,
+        .task-section button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .settings-section button:hover,
+        .task-section button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Settings</h2>
+
+            <form id="profilePictureForm" enctype="multipart/form-data">
+                <div class="settings-section">
+                    <label for="profilePicture">Change Profile Picture</label>
+                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+                    <img id="profilePicPreview" class="profile-pic-preview" src="#" alt="Preview" style="display:none;">
+                    <button type="submit">Update</button>
+                </div>
+            </form>
+
+            <div class="settings-section">
+                <label for="username">Change Username</label>
+                <input type="text" id="username" placeholder="Enter new username">
+                <button id="updateUsername">Update</button>
+            </div>
+
+            <div class="settings-section">
+                <label for="email">Update Email</label>
+                <input type="email" id="email" placeholder="Enter new email">
+                <button id="updateEmail">Update</button>
+            </div>
+
+            <div class="settings-section">
+                <label for="password">Change Password</label>
+                <input type="password" id="password" placeholder="Enter new password">
+                <button id="updatePassword">Update</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div id="addTaskModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Task</h2>
+
+            <form id="addTaskForm">
+                <div class="task-section">
+                    <label for="taskName">Task Name</label>
+                    <input id="taskName" type="text" placeholder="Enter task name" required>
+                </div>
+
+                <div class="task-section">
+                    <label for="taskDescription">Description</label>
+                    <textarea id="taskDescription" placeholder="Enter task description" required></textarea>
+                </div>
+
+                <div class="task-section">
+                    <label for="taskPriority">Priority</label>
+                    <select id="taskPriority" required>
+                        <option value="" disabled selected>Select priority</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+
+                <div class="task-section">
+                    <label for="taskDueDate">Due Date</label>
+                    <input id="taskDueDate" type="date" required>
+                </div>
+
+                <div class="task-section">
+                    <button type="submit">Add Task</button>
+                    <button type="button" id="SeeTask">Check your tasks</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Settings Modal Logic
+            const settingsModal = document.getElementById('settingsModal');
+            const settingsSpan = document.getElementsByClassName('close')[0];
+            const settingsButton = document.getElementById('settingsBtn');
+            const profilePictureInput = document.getElementById('profilePicture');
+            const profilePicPreview = document.getElementById('profilePicPreview');
+
+            if (settingsButton) {
+                settingsButton.addEventListener('click', () => {
+                    settingsModal.style.display = 'block';
+                });
+            }
+
+            settingsSpan.onclick = function() {
+                settingsModal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target === settingsModal) {
+                    settingsModal.style.display = 'none';
+                }
+            }
+
+             
+
+            // Add Task Modal Logic
+            const addTaskModal = document.getElementById('addTaskModal');
+            const addTaskSpan = document.getElementsByClassName('close')[1];
+            const addTaskButton = document.getElementById('addTaskBtn');
+
+            if (addTaskButton) {
+                addTaskButton.addEventListener('click', () => {
+                    addTaskModal.style.display = 'block';
+                });
+            }
+
+            addTaskSpan.onclick = function() {
+                addTaskModal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target === addTaskModal) {
+                    addTaskModal.style.display = 'none';
+                }
+            }
+
+            document.getElementById('addTaskForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const name = document.getElementById('taskName').value;
+                const description = document.getElementById('taskDescription').value;
+                const priority = document.getElementById('taskPriority').value;
+                const dueDate = document.getElementById('taskDueDate').value; // Added due date
+                const taskData = { name, description, priority, dueDate }; // Include due date in the task data
+
+                fetch('/add-Task', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(taskData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Task added successfully!');
+                    addTaskModal.style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Error adding task:', error);
+                });
+            });
+
+            document.getElementById('SeeTask').addEventListener('click', function() {
+                // Logic to display tasks can be added here
+                alert('Displaying tasks...');
+            });
+        });
+    </script>
+</body>
+</html>

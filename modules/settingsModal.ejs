@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Modal</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .settings-section {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .settings-section label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .settings-section input,
+        .settings-section button {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .settings-section input {
+            flex-grow: 1;
+        }
+
+        .settings-section button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .settings-section button:hover {
+            background-color: #45a049;
+        }
+
+        .profile-pic-preview {
+            display: block;
+            margin: 10px 0;
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Settings</h2>
+
+            <form id="profilePictureForm" enctype="multipart/form-data">
+                <div class="settings-section">
+                    <label for="profilePicture">Change Profile Picture</label>
+                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+                    <img id="profilePicPreview" class="profile-pic-preview" src="#" alt="Preview" style="display:none;">
+                    <button type="submit">Update</button>
+                </div>
+            </form>
+
+            <div class="settings-section">
+                <label for="username">Change Username</label>
+                <input type="text" id="username" placeholder="Enter new username">
+                <button id="updateUsername">Update</button>
+            </div>
+
+            <div class="settings-section">
+                <label for="email">Update Email</label>
+                <input type="email" id="email" placeholder="Enter new email">
+                <button id="updateEmail">Update</button>
+            </div>
+
+            <div class="settings-section">
+                <label for="password">Change Password</label>
+                <input type="password" id="password" placeholder="Enter new password">
+                <button id="updatePassword">Update</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('settingsModal');
+            const span = document.getElementsByClassName('close')[0];
+            const settingsButton = document.getElementById('settingsBtn');
+            const profilePictureInput = document.getElementById('profilePicture');
+            const profilePicPreview = document.getElementById('profilePicPreview');
+
+            if (settingsButton) {
+                settingsButton.addEventListener('click', () => {
+                    modal.style.display = 'block';
+                });
+            }
+
+            span.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            profilePictureInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        profilePicPreview.src = e.target.result;
+                        profilePicPreview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            document.getElementById('profilePictureForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(this);
+                fetch('/updateProfilePicture', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Profile picture updated!');
+                    modal.style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Error updating profile picture:', error);
+                });
+            });
+
+            document.getElementById('updateUsername').addEventListener('click', function() {
+                const newUsername = document.getElementById('username').value;
+                fetch('/updateUsername', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username: newUsername })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Username updated to: ' + newUsername);
+                })
+                .catch(error => {
+                    console.error('Error updating username:', error);
+                });
+            });
+
+            document.getElementById('updateEmail').addEventListener('click', function() {
+                const newEmail = document.getElementById('email').value;
+                fetch('/updateEmail', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: newEmail })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Email updated to: ' + newEmail);
+                })
+                .catch(error => {
+                    console.error('Error updating email:', error);
+                });
+            });
+
+            document.getElementById('updatePassword').addEventListener('click', function() {
+                const newPassword = document.getElementById('password').value;
+                fetch('/updatePassword', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ password: newPassword })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Password updated successfully!');
+                })
+                .catch(error => {
+                    console.error('Error updating password:', error);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
