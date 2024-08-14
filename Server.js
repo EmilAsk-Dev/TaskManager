@@ -35,7 +35,7 @@ app.set('view engine', 'ejs');
 app.use((req, res, next) => {
     console.log(`${req.method} request for ${req.url}`);
     next();
-});
+}); 
 
 
 app.use((req, res, next) => {
@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 
 // Use the routes defined in routes.js
 app.use('/', routes);
-
+ 
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
