@@ -11,9 +11,11 @@ const {
     addTask, 
     markTaskAsCompleted, 
     removeTasks, 
-    getTasks,
-    unmarkTaskAsCompleted ,
-    getSortedTasks
+    addCategory, 
+    readCategories, 
+    deleteCategory,
+    assignCategoryToTask,
+    getTasksByCategory,    
 } = require('./services/taskService'); // Include addCategory, readCategories, deleteCategory functions
 
 const {
@@ -315,37 +317,36 @@ router.get('/users/:id/tasks', (req, res) => {
 });
 
 
-router.get('/workspaces/:id/tasks', (req, res) => {
-    const workspaceId = parseInt(req.params.id, 10);
-    const tasksForWorkspace = getTasksForWorkspace(workspaceId);
+router.get('/categories/:categoryId/tasks', async (req, res) => {
+    const categoryId = req.params.categoryId;
 
-    if (!tasksForWorkspace) {
-        return res.status(404).json({ error: 'No tasks found for this workspace' });
+    try {
+        const tasks = await getTasksByCategory(categoryId);
+        if (tasks) {
+            res.status(200).json(tasks);
+        } else {
+            res.status(404).json({ message: 'No tasks found for this category' });
+        }
+    } catch (error) {
+        console.error('Error fetching tasks for category:', error.message);
+        res.status(500).json({ message: 'Internal server error' });
     }
-
-    res.status(200).json(tasksForWorkspace);
 });
 
-
-router.post('/workspaces/:id/tasks', (req, res) => {
-    const workspaceId = parseInt(req.params.id, 10);
-    const { title, description } = req.body;
-
-    if (!title || !description) {
-        return res.status(400).json({ error: 'Title and description are required' });
+router.get("/users", async (req,res) =>{
+    try {
+        const Users = await userService.getAllUserInfo()
+        if(Users) {
+            res.status(200).json(Users)            
+        } else {
+            res.status(404).json({message: 'Cant get the Users'})
+        }
+    } 
+    catch (error){
+        console.error('Error fetching tasks for category:', error.message);
+        res.status(500).json({ message: 'Internal server error' });
     }
 
-    const newTask = {
-        id: tasks.length + 1,
-        title,
-        description,
-        workspaceId,
-        assignedTo: null,
-    };
-
-    tasks.push(newTask);
-    res.status(201).json({ message: 'Task created', task: newTask });
-});
-
+})
 
 module.exports = router;
