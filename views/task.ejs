@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Task.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body>
+    <div class="container">
+        <aside>
+            <div class="logo">
+                <img class="profile" src="/svg/Cey.png" alt="Organizo">
+                <strong id="user"><%= user ? user.username : 'Guest' %></strong>
+            </div>
+            <nav>
+                <ul>
+                    <% if (!user) { %>
+                        <li><a href="/login"><strong>Login</strong></a></li>
+                        <li><a href="/CreateUser"><strong>Create User</strong></a></li>
+                    <% } else { %>
+                        <li id="settingsBtn">
+                            <img src="/svg/settings.svg" alt="Settings">
+                        </li>
+                        <li class="active"><a href="#dashboard"><strong>Dashboard</strong></a></li>                        
+                        <li><a href="#notifications"><strong>Notifications</strong></a></li>                        
+                        <li><a href="/logout"><strong>Log out</strong></a></li>
+                    <% } %>
+                </ul>
+            </nav>
+        </aside>        
+        <main>
+            <header>
+                <div class="search-bar">
+                    <input type="search" placeholder="Search">
+                </div>
+                <div>
+                    <button id="remove-tasks-btn" class="new-task-btn">Remove Tasks</button>
+                    <button id="addTaskBtn" class="new-task-btn">New task</button>
+                </div>
+            </header>
+            <div class="dashboard-content">
+                <div class="calendar-section">
+                    <h2>March 2022</h2>
+                    <!-- Calendar component goes here -->
+                </div>
+
+                <div class="tasks-section">
+                    <h2>Tasks</h2>
+                    <div id="asap-task-list" class="scrollable-list">
+                        <!-- Tasks will be added here dynamically -->
+                    </div>
+                </div>                
+                <div class="categories-section">
+                    <h2>My categories</h2>
+                    <div id="categories-list" class="scrollable-list">
+                        <!-- Categories will be dynamically added here -->
+                    </div>
+                    <button id="add-category-btn" class="new-task-btn">Add Category</button>
+                </div>
+                
+                <div class="tracking-section">
+                    <h2>My tracking</h2>
+                    <div id="tracking-task-list" class="scrollable-list">
+                        <!-- Tasks will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div class="completed-tasks-section">
+                    <h2>Completed tasks</h2>
+                    <div id="completed-task-list" class="scrollable-list">
+                        <!-- Completed tasks will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Include settings modal -->
+    <%- include('../modules/settingsModal') %>
+    <%- include('../modules/addTask') %>
+
+    <!-- Add Category Modal -->
+    <div id="addCategoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" data-modal-id="addCategoryModal">&times;</span>
+            <h2>Add Category</h2>
+            <input type="text" id="categoryName" placeholder="Category name">
+            <button id="addCategoryBtn">Add</button>
+        </div>
+    </div>
+    
+        
+        <!-- Assign Category Modal -->
+    <div id="assignCategoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" data-modal-id="assignCategoryModal">&times;</span>
+            <h2>Assign Category</h2>
+            <div id="category-list-container"></div>      
+            <button id="assign-category-btn">Assign Category</button>  
+        </div>
+    </div>
+
+    <!-- Remove Tasks Modal -->
+    <div id="removeTasksModal" class="modal">
+        <div class="modal-content">
+            <span class="close" data-modal-id="removeTasksModal">&times;</span>
+            <h2>Select Tasks to Remove</h2>
+            <div id="remove-tasks-list"></div>
+            <button id="confirm-remove-btn">Confirm Remove</button>
+        </div>
+    </div>
+
+    <!-- Category Tasks Modal -->
+    <div id="categoryTasksModal" class="modal">
+        <div class="modal-content">
+            <span class="close" data-modal-id="categoryTasksModal">&times;</span>
+            <h2 id="categoryTasksTitle"></h2>
+            <div id="categoryTasksList" class="scrollable-list"></div>
+        </div>
+    </div>
+    
+    
+    <script src="Task.js"></script>
+</body>
+</html>

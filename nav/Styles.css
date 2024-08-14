@@ -1,0 +1,27 @@
+/* Navigation Styles */
+nav {
+    background-color: #333; /* Dark background color for the navigation bar */
+    color: #fff;
+    padding: 10px 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}

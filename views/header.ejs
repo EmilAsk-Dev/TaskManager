@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <!-- Include common CSS styles -->
+    <link rel="stylesheet" href="/nav/Styles.css"> <!-- Update the path as needed -->
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <% if (!user) { %> <!-- Check if user is not defined (not logged in) -->
+                    <li><a href="/login">Login</a></li>
+                <% } else { %> <!-- User is defined (logged in) -->
+                    <li><a href="/logout">Logout</a></li>
+                    <li><a href="/CreateUser">Create User</a></li>
+                <% } %>
+            </ul>
+        </nav>
+    </header>
+    <%- body %> <!-- This will be replaced by the content from other EJS files -->
+</body>
+</html>
