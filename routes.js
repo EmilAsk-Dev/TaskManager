@@ -15,9 +15,7 @@ const {
     readCategories, 
     deleteCategory,
     assignCategoryToTask,
-    getTasksByCategory
-
-    
+    getTasksByCategory,    
 } = require('./services/taskService'); // Include addCategory, readCategories, deleteCategory functions
 const fs = require('fs');
 const sql = require('mssql');
@@ -262,6 +260,20 @@ router.get('/categories/:categoryId/tasks', async (req, res) => {
     }
 });
 
+router.get("/users", async (req,res) =>{
+    try {
+        const Users = await userService.getAllUserInfo()
+        if(Users) {
+            res.status(200).json(Users)            
+        } else {
+            res.status(404).json({message: 'Cant get the Users'})
+        }
+    } 
+    catch (error){
+        console.error('Error fetching tasks for category:', error.message);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 
+})
 
 module.exports = router;

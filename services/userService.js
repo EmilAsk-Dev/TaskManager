@@ -93,7 +93,7 @@ async function getAllUserInfo() {
         let pool = await sql.connect(config);
 
         // Query to get all user info (username, password, gmail, id, isadmin)
-        let result = await pool.request().query('SELECT username, password, gmail, id, isadmin FROM Users');
+        let result = await pool.request().query('SELECT username, password, id, isadmin FROM Users');
 
         // Initialize an empty array to hold user info objects
         let usersArray = [];

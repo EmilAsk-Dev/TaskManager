@@ -340,5 +340,12 @@ h2 {
 }
 
 .Table-info {
-    padding: 20px;
+    padding: 10px;
+}
+.Body-table td {
+    border: 2px solid black;
+}
+
+#UserData {
+    cursor: pointer;
 }

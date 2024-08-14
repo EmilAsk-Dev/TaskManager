@@ -38,14 +38,14 @@ app.use((req, res, next) => {
 });
 
 // this is for dev, auto cookie
-// app.use((req, res, next) => {
-//     req.session.user = {
-//         id: 1,
-//         username: 'Admin',
-//         isAdmin: true
-//     }; 
-//     next();
-// });
+app.use((req, res, next) => {
+    req.session.user = {
+        id: 1,
+        username: 'Admin',
+        isAdmin: true
+    }; 
+    next();
+});
 
 
 
