@@ -334,16 +334,62 @@ h2 {
 }
 
 .TableAdmin {
-    
-    
-    
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+}
+
+.TableAdmin thead {
+    background-color: #f2f2f2;
+}
+
+.TableAdmin th, .TableAdmin td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
 .Table-info {
-    padding: 10px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
 }
+
+.Body-table:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.Body-table:hover {
+    background-color: #f1f1f1;
+}
+
 .Body-table td {
-    border: 2px solid black;
+    transition: background-color 0.3s ease;
+}
+
+.Body-table td:first-child {
+    border-left: 4px solid #4CAF50;
+}
+
+.Body-table td:last-child {
+    text-align: center;
+    font-weight: bold;
+    
+}
+
+/* Centering content in the "Is Admin" column */
+.TableAdmin th:nth-child(5), .TableAdmin td:nth-child(5) {
+    text-align: center;
+    font-weight: bold;    
+}
+
+.TableAdmin td:nth-child(5):contains('Yes') {
+    color: #4CAF50; /* Green color for "Yes" */
+}
+
+.TableAdmin td:nth-child(5):contains('No') {
+    color: #FF5733; /* Orange-red color for "No" */
 }
 
 #UserData {

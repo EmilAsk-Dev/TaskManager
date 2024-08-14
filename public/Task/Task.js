@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         `;
 
         categoryElement.querySelector('h3').addEventListener('click', () => showCategoryTasksModal(category));
-
+        
         const removeBtn = categoryElement.querySelector('.remove-category-btn');
         if (removeBtn) {
             removeBtn.addEventListener('click', () => {
