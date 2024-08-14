@@ -4,7 +4,7 @@ const sql = require('mssql');
 const config = {
     user: 'TaskManager',
     password: 'H82po79b',
-    server: 'EMIL',
+    server: 'localhost',
     database: 'UserDatabase',
     options: {
         encrypt: false,
@@ -13,3 +13,5 @@ const config = {
 };
 
 module.exports = config;
+
+//10.79.1.200

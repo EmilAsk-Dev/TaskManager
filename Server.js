@@ -35,6 +35,7 @@ app.set('view engine', 'ejs');
 app.use((req, res, next) => {
     console.log(`${req.method} request for ${req.url}`);
     next();
+<<<<<<< HEAD
 }); 
 
 
@@ -51,10 +52,33 @@ app.use((req, res, next) => {
 // Use the routes defined in routes.js
 app.use('/', routes);
  
+=======
+});
+
+// this is for dev, auto cookie
+// app.use((req, res, next) => {
+//     req.session.user = {
+//         id: 1,
+//         username: 'Admin',
+//         isAdmin: true
+//     }; 
+//     next();
+// });
+
+
+
+
+// Use the routes defined in routes.js
+app.use('/', routes);
+
+>>>>>>> 64d0a6ffad7f370d25a957fe9e3dc7ca519ef1ba
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
+<<<<<<< HEAD
 
 
 //Test Commit test
+=======
+>>>>>>> 64d0a6ffad7f370d25a957fe9e3dc7ca519ef1ba

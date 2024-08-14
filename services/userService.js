@@ -3,7 +3,7 @@ const sql = require('mssql');
 const config = {
     user: 'TaskManager',
     password: 'H82po79b',
-    server: 'EMIL',
+    server: 'localhost',
     database: 'UserDatabase',
     options: {
         encrypt: false, // Depending on your server configuration
@@ -76,7 +76,7 @@ const createUser = async (userData) => {
                 INSERT INTO Users (username, password, isAdmin)
                 VALUES (@username, @password, @isAdmin)
             `);
-
+                
         console.log('User created successfully');
         return { success: true, message: 'User created successfully' };
     } catch (err) {
@@ -87,8 +87,40 @@ const createUser = async (userData) => {
     }
 };
 
+async function getAllUserInfo() {
+    try {
+        // Connect to the database
+        let pool = await sql.connect(config);
+
+        // Query to get all user info (username, password, gmail, id, isadmin)
+        let result = await pool.request().query('SELECT username, password, gmail, id, isadmin FROM Users');
+
+        // Initialize an empty array to hold user info objects
+        let usersArray = [];
+
+        // Cycle through all the users and push each user's info into the array
+        for (let i = 0; i < result.recordset.length; i++) {
+            let user = result.recordset[i];
+            usersArray.push(user);
+        }
+
+        // Log the array of user info (or use it as needed)
+        console.log(usersArray);
+
+        // Return the array if needed
+        return usersArray;
+
+    } catch (err) {
+        console.error('SQL error', err);
+    } finally {
+        // Close the database connection
+        sql.close();
+    }
+}
+
 
 module.exports = {
     authenticateUser,
-    createUser
+    createUser,
+    getAllUserInfo
 };

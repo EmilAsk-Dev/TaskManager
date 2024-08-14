@@ -10,6 +10,7 @@ const authenticate = async (req, res, next) => {
             id: user.id,
             username: user.username,
             isAdmin: user.isAdmin
+            
         };
 
         console.log('Authenticated user:', req.session.user);

@@ -83,9 +83,7 @@ header {
 }
 
 .dashboard-content {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto 1fr auto;
+    display: flex;    
     gap: 20px;
     height: calc(100vh - 140px); /* Adjust this value based on your header height */
 }
@@ -98,10 +96,7 @@ header {
     overflow: hidden;
 }
 
-.calendar-section {
-    grid-column: 1;
-    grid-row: 1;
-}
+
 
 .tasks-section {
     grid-column: 2;
@@ -109,6 +104,7 @@ header {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    flex: auto;
 }
 
 .categories-section {
@@ -118,11 +114,7 @@ header {
     overflow-y: auto;
 }
 
-.tracking-section {
-    grid-column: 1;
-    grid-row: 2;
-    overflow-y: auto;
-}
+
 
 .completed-tasks-section {
     grid-column: 3;
@@ -339,4 +331,14 @@ h2 {
     cursor: pointer;
     margin-top: 20px; /* Adjust margin as needed */
     align-self: flex-end; /* Align button to the end (right side) of the section */
+}
+
+.TableAdmin {
+    
+    
+    
+}
+
+.Table-info {
+    padding: 20px;
 }

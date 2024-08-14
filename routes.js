@@ -21,6 +21,7 @@ const {
 } = require('./services/taskService'); // Include addCategory, readCategories, deleteCategory functions
 const fs = require('fs');
 const sql = require('mssql');
+const { Console } = require('console');
 
 // Middleware to parse JSON and handle cookies
 router.use(express.json());
@@ -28,13 +29,25 @@ router.use(express.urlencoded({ extended: true }));
 router.use(express.static(path.join(__dirname, '.', 'public')));
 
 // Route to serve the home page
-router.get('/', (req, res) => {
-    res.render('home', { user: req.session.user });
+router.get('/', async (req, res) => {
+    // Check if req.session.user exists and if isAdmin is defined, otherwise default to false
+    const isAdmin = req.session.user && typeof req.session.user.isAdmin !== 'undefined' ? req.session.user.isAdmin : false;
+
+    // Render the home page with the user and isAdmin values
+    res.render('home', { 
+        user: req.session.user,
+        isAdmin: isAdmin
+    });
 });
 
-// Route to serve the login page
-router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '.', 'public', 'Login', 'Login.html'));
+
+
+// Route to serve the Login
+router.get('/Login', (req, res) => {
+    if(req.session.user){
+        res.redirect("/Task")
+    }    
+    res.render('Login', { user: req.session.user });
 });
 
 // Route to handle login (authentication middleware added)
@@ -207,31 +220,13 @@ router.post('/categories', async (req, res) => {
 // DELETE a category
 router.delete('/categories/:categoryId', async (req, res) => {
     const categoryId = req.params.categoryId;
-
     try {
-        // Connect to the database
-        let pool = await sql.connect(config);
-        
-        // Begin a transaction
-        const transaction = new sql.Transaction(pool);
-        await transaction.begin();
-
-        // Set categoryId to NULL for tasks that reference this category
-        let request = new sql.Request(transaction);
-        await request.query`UPDATE Tasks SET categoryId = NULL WHERE categoryId = ${categoryId}`;
-
-        // Delete the category
-        request = new sql.Request(transaction);
-        await request.query`DELETE FROM Categories WHERE id = ${categoryId}`;
-
-        // Commit the transaction
-        await transaction.commit();
-
-        res.status(200).json({ success: true, message: 'Category deleted successfully' });
-    } catch (err) {
-        console.error('Error deleting category:', err.message);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        deleteCategory(categoryId)
     }
+    catch{
+        log("cant connect to db")
+    }
+    
 });
 
 router.post('/tasks/:taskId/category', async (req, res) => {
@@ -239,7 +234,6 @@ router.post('/tasks/:taskId/category', async (req, res) => {
     const { categoryId } = req.body;
 
     try {
-        // Assuming `assignCategoryToTask` is a function from `taskService`
         const result = await assignCategoryToTask(taskId, categoryId);
         if (result.success) {
             res.status(200).json(result);
@@ -267,5 +261,7 @@ router.get('/categories/:categoryId/tasks', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+
 
 module.exports = router;
