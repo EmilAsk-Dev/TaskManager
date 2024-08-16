@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('AdminPage is running');    
 
+    // Fetch and display users
     async function fetchAndDisplayUsers() {
         try {
             const response = await fetch('/Users');
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // Update the user table with fetched users
     function updateUserTable(users) {
         const userTableBody = document.querySelector('.TableAdmin tbody');
         if (!userTableBody) return;
@@ -25,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Create a row for each user
     function createUserRow(user) {
         const row = document.createElement('tr');
         row.className = 'Body-table';
@@ -41,11 +44,13 @@ document.addEventListener('DOMContentLoaded', function() {
         row.appendChild(gmailCell);
         row.appendChild(isAdminCell);
         
+        // Add event listener to show user tasks when clicked
         row.addEventListener('click', () => showUserDetails(user));
 
         return row;
     }
     
+    // Helper function to create table cells
     function createTableCell(content, className) {
         const cell = document.createElement('td');
         cell.className = className;
@@ -53,5 +58,57 @@ document.addEventListener('DOMContentLoaded', function() {
         return cell;
     }
 
-    fetchAndDisplayUsers()
-    });
+    // Show details of a selected user
+    function showUserDetails(user) {
+        console.log('User details:', user);
+        fetchAndDisplayTasks(user.id);
+    }
+
+    // Fetch and display tasks for a specific user
+    async function fetchAndDisplayTasks(userId) {
+        try {
+            const response = await fetch(`/tasks?userId=${userId}`);
+            if (!response.ok) throw new Error('Failed to fetch tasks');
+            
+            const tasks = await response.json();
+            updateTaskLists(tasks);
+        } catch (error) {
+            console.error('Error fetching tasks:', error.message);
+        }
+    }
+    
+    // Update the task list with fetched tasks
+    function updateTaskLists(tasks) {
+        const taskListContainer = document.querySelector('#completed-task-list');
+        if (!taskListContainer) return;
+
+        taskListContainer.innerHTML = ''; // Clear existing tasks
+
+        tasks.forEach(task => {
+            const taskElement = createTaskElement(task);
+            taskListContainer.appendChild(taskElement);
+        });
+    }
+    
+    // Create an element for each task
+    function createTaskElement(task) {
+        const taskElement = document.createElement('div');
+        taskElement.className = 'task';
+        taskElement.innerHTML = `
+            <div class="task-checkbox">
+                <input type="checkbox" id="taskCheckbox_${task.id}" name="taskCheckbox" data-task-id="${task.id}" ${task.status ? 'checked' : ''}>
+            </div>
+            <div class="task-content">
+                <h3>${task.name}</h3>
+                <p>Description: ${task.description}</p>
+                <p>Due: ${task.dueDate}</p>
+                <p>Priority: ${task.priority} Level</p>
+                <p>Category: ${task.category ? task.category.name : 'Uncategorized'}</p>
+            </div>
+        `;
+        return taskElement;
+    }
+
+    // Initial call to fetch and display users
+    fetchAndDisplayUsers();
+});

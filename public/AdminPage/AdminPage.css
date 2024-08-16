@@ -104,10 +104,11 @@ header {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    flex: auto;
+    max-width: 33%;
+    min-width: 25%;
 }
 
-.categories-section {
+.user-section {
     grid-column: 3;
     grid-row: 1;
     min-height: 100px; /* Adjust this value as needed */
@@ -120,6 +121,8 @@ header {
     grid-column: 3;
     grid-row: 2 / span 2;
     overflow-y: auto;
+    max-width: 25%;
+    min-width: 25%;
 }
 
 .task {
@@ -182,20 +185,32 @@ header {
     padding-right: 10px; /* Add some padding for the scrollbar */
 }
 
-#asap-task-list::-webkit-scrollbar, #completed-task-list::-webkit-scrollbar, .categories-section::-webkit-scrollbar, .tracking-section::-webkit-scrollbar {
+#user-task-list::-webkit-scrollbar, 
+#completed-task-list::-webkit-scrollbar, 
+#user-task-details-section::-webkit-scrollbar, 
+#task-tracking-section::-webkit-scrollbar {
     width: 8px;
 }
 
-#asap-task-list::-webkit-scrollbar-track, #completed-task-list::-webkit-scrollbar-track, .categories-section::-webkit-scrollbar-track, .tracking-section::-webkit-scrollbar-track {
+#user-task-list::-webkit-scrollbar-track, 
+#completed-task-list::-webkit-scrollbar-track, 
+#user-task-details-section::-webkit-scrollbar-track, 
+#task-tracking-section::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
 
-#asap-task-list::-webkit-scrollbar-thumb, #completed-task-list::-webkit-scrollbar-thumb, .categories-section::-webkit-scrollbar-thumb, .tracking-section::-webkit-scrollbar-thumb {
+#user-task-list::-webkit-scrollbar-thumb, 
+#completed-task-list::-webkit-scrollbar-thumb, 
+#user-task-details-section::-webkit-scrollbar-thumb, 
+#task-tracking-section::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 4px;
 }
 
-#asap-task-list::-webkit-scrollbar-thumb:hover, #completed-task-list::-webkit-scrollbar-thumb:hover, .categories-section::-webkit-scrollbar-thumb:hover, .tracking-section::-webkit-scrollbar-thumb:hover {
+#user-task-list::-webkit-scrollbar-thumb:hover, 
+#completed-task-list::-webkit-scrollbar-thumb:hover, 
+#user-task-details-section::-webkit-scrollbar-thumb:hover, 
+#task-tracking-section::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
@@ -313,7 +328,7 @@ h2 {
     margin-top: 20px;
 }
 
-.categories-section {
+.user-section {
     grid-column: 3;
     grid-row: 1;
     min-height: 100px; /* Adjust this value as needed */
@@ -321,6 +336,8 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Ensure space between categories and button */
+    min-width: 25%;
+    max-width: 25%;
 }
 
 .add-category-btn {
@@ -353,7 +370,10 @@ h2 {
 .Table-info {
     font-size: 14px;
     color: #333;
-    cursor: pointer;
+}
+
+.Body-table {
+    padding: 2px;
 }
 
 .Body-table:nth-child(even) {
@@ -361,7 +381,8 @@ h2 {
 }
 
 .Body-table:hover {
-    background-color: #f1f1f1;
+    background-color: #e8f5e9;
+    cursor: pointer; 
 }
 
 .Body-table td {
@@ -375,13 +396,13 @@ h2 {
 .Body-table td:last-child {
     text-align: center;
     font-weight: bold;
-    
 }
+
+
 
 /* Centering content in the "Is Admin" column */
 .TableAdmin th:nth-child(5), .TableAdmin td:nth-child(5) {
     text-align: center;
-    font-weight: bold;    
 }
 
 .TableAdmin td:nth-child(5):contains('Yes') {
@@ -392,6 +413,12 @@ h2 {
     color: #FF5733; /* Orange-red color for "No" */
 }
 
+
 #UserData {
     cursor: pointer;
 }
+
+.balls:hover {
+    background-color: black;
+}
+
