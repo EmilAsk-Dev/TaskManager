@@ -13,7 +13,7 @@ body {
 }
 
 aside {
-    width: 220px;
+    max-width: 33%;
     background-color: #5c52c7;
     padding: 20px;
     color: white;

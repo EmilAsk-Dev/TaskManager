@@ -65,9 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Fetch and display tasks for a specific user
-    async function fetchAndDisplayTasks(userId) {
+    async function fetchAndDisplayTasks(username) {
         try {
-            const response = await fetch(`/tasks?userId=${userId}`);
+            const response = await fetch(`/checkuser`);
             if (!response.ok) throw new Error('Failed to fetch tasks');
             
             const tasks = await response.json();

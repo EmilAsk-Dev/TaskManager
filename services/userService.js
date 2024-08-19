@@ -87,14 +87,14 @@ const createUser = async (userData) => {
     }
 };
 
-async function getAllUserInfo() {
+async function getAllUserInfo(User) {
     try {
         // Connect to the database
         let pool = await sql.connect(config);
 
         // Query to get all user info (username, password, gmail, id, isadmin)
         let result = await pool.request().query('SELECT username, password, id, isadmin FROM Users');
-
+        
         // Initialize an empty array to hold user info objects
         let usersArray = [];
 
@@ -117,6 +117,7 @@ async function getAllUserInfo() {
         sql.close();
     }
 }
+
 
 
 module.exports = {

@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
     }
-
+    
     async function markTaskAsCompleted(taskId, taskElement) {
         try {
             const response = await fetch(`/tasks/${taskId}/complete`, { method: 'POST', headers: { 'Content-Type': 'application/json' } });
