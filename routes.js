@@ -123,6 +123,18 @@ router.get('/tasks', async (req, res) => {
     }
 });
 
+router.get('/checkuser', async (req, res) => {    
+    try {
+
+        
+        const tasks = await readTasks(User);
+        res.json(tasks);
+    } catch (error) {
+        console.error('Error fetching tasks:', error.message);
+        res.status(500).json({ success: false, message: 'Failed to fetch tasks' });
+    }
+});
+
 // Route to fetch highest priority task for the logged-in user
 router.get('/highest-prio-task', async (req, res) => {
     try {
