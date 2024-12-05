@@ -11,11 +11,9 @@ const {
     addTask, 
     markTaskAsCompleted, 
     removeTasks, 
-    addCategory, 
-    readCategories, 
-    deleteCategory,
-    assignCategoryToTask,
-    getTasksByCategory,    
+    getTasks,
+    unmarkTaskAsCompleted ,
+    getSortedTasks
 } = require('./services/taskService'); // Include addCategory, readCategories, deleteCategory functions
 
 const {
