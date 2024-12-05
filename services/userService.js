@@ -1,32 +1,22 @@
 const sql = require('mssql');
 
-const config = {
-    user: 'TaskManager',
-    password: 'H82po79b',
-    server: 'localhost',
-    database: 'UserDatabase',
-    options: {
-        encrypt: false, // Depending on your server configuration
-        trustServerCertificate: true // Depending on your server configuration
-    }
-};
+const config = require("./dbConfig")
 
 const authenticateUser = async (username, password) => {
     try {
         const pool = await sql.connect(config);
         const result = await pool.request()
-            .input('username', sql.VarChar, username)
-            .input('password', sql.VarChar, password)
+            .input('Username', sql.VarChar, username)
+            .input('Password', sql.NVarChar, password) // Ensure you're passing the hashed password
             .query(`
-                SELECT id, username, isAdmin
-                FROM Users
-                WHERE username = @username AND password = @password
+                EXEC Login @Username = @Username, @Password = @Password
             `);
         
         if (result.recordset.length === 0) {
             throw new Error('Invalid username or password');
         }
 
+        // Return user details
         return result.recordset[0];
     } catch (err) {
         console.error('Error authenticating user:', err.message);
@@ -40,14 +30,12 @@ const checkIfUserExists = async (username) => {
     try {
         const pool = await sql.connect(config);
         const result = await pool.request()
-            .input('username', sql.VarChar, username)
+            .input('Username', sql.VarChar, username)
             .query(`
-                SELECT COUNT(*) AS count
-                FROM Users
-                WHERE username = @username
+                EXEC CheckIfUserExists @Username = @Username
             `);
 
-        return result.recordset[0].count > 0; // true if user exists, false otherwise
+        return result.recordset[0].UserExists === 1; // true if exists, false otherwise
     } catch (err) {
         console.error('Error checking if user exists:', err.message);
         throw err;
@@ -56,38 +44,35 @@ const checkIfUserExists = async (username) => {
     }
 };
 
+
 const createUser = async (userData) => {
     try {
-        const { username, password, isAdmin } = userData;
+        const { username, password, email, roleID } = userData;
 
-        // Check if user already exists
-        const userExists = await checkIfUserExists(username);
-        if (userExists) {
-            return { success: false, message: 'Username already exists' };
-        }
+        // Hash the password before inserting
+        const hashedPassword = password; // Use bcrypt or other secure hashing methods here
 
-        // If user does not exist, proceed with creating new user
         const pool = await sql.connect(config);
-        await pool.request()
-            .input('username', sql.VarChar, username)
-            .input('password', sql.VarChar, password)
-            .input('isAdmin', sql.Bit, isAdmin ? 1 : 0)
+        const result = await pool.request()
+            .input('Username', sql.VarChar, username)
+            .input('Password', sql.NVarChar, hashedPassword)
+            .input('Email', sql.VarChar, email)
+            .input('RoleID', sql.Int, roleID)
             .query(`
-                INSERT INTO Users (username, password, isAdmin)
-                VALUES (@username, @password, @isAdmin)
+                EXEC CreateUser @Username = @Username, @Password = @Password, @Email = @Email, @RoleID = @RoleID
             `);
-                
-        console.log('User created successfully');
-        return { success: true, message: 'User created successfully' };
+        
+        return result.recordset;
     } catch (err) {
-        console.error('Error creating user:', err);
-        return { success: false, message: 'Error creating user' };
+        console.error('Error creating user:', err.message);
+        throw err;
     } finally {
         await sql.close();
     }
 };
 
-async function getAllUserInfo(User) {
+
+async function getAllUserInfo() {
     try {
         // Connect to the database
         let pool = await sql.connect(config);
@@ -123,5 +108,6 @@ async function getAllUserInfo(User) {
 module.exports = {
     authenticateUser,
     createUser,
-    getAllUserInfo
+    getAllUserInfo,
+    checkIfUserExists
 };

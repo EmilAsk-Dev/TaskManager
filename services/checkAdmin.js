@@ -1,4 +1,9 @@
 const checkAdmin = (req, res, next) => {
+
+    if(req.session.user.Role == 1){
+        next()
+    }
+
     if (req.session.user && req.session.user.isAdmin) {
         next();
     } else {

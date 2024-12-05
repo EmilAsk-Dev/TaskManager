@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('AdminPage is running');    
 
+    let globalUsername; // Declare a global variable to store the selected user's username
+
     // Fetch and display users
     async function fetchAndDisplayUsers() {
         try {
@@ -61,13 +63,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show details of a selected user
     function showUserDetails(user) {
         console.log('User details:', user);
-        fetchAndDisplayTasks(user.id);
+        globalUsername = user.username; // Store the username globally
+        fetchAndDisplayTasks(globalUsername); // Pass username to fetch tasks
     }
 
     // Fetch and display tasks for a specific user
     async function fetchAndDisplayTasks(username) {
         try {
-            const response = await fetch(`/checkuser`);
+            const response = await fetch(`/checkuser?username=${username}`); // Send username as a query parameter
             if (!response.ok) throw new Error('Failed to fetch tasks');
             
             const tasks = await response.json();
@@ -85,13 +88,13 @@ document.addEventListener('DOMContentLoaded', function() {
         taskListContainer.innerHTML = ''; // Clear existing tasks
 
         tasks.forEach(task => {
-            const taskElement = createTaskElement(task);
+            const taskElement = createTaskElement(task, globalUsername);
             taskListContainer.appendChild(taskElement);
         });
     }
     
     // Create an element for each task
-    function createTaskElement(task) {
+    function createTaskElement(task, username) {
         const taskElement = document.createElement('div');
         taskElement.className = 'task';
         taskElement.innerHTML = `
@@ -104,10 +107,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p>Due: ${task.dueDate}</p>
                 <p>Priority: ${task.priority} Level</p>
                 <p>Category: ${task.category ? task.category.name : 'Uncategorized'}</p>
+                <p data-username="${username}">Username: ${username}</p>
             </div>
         `;
         return taskElement;
     }
+    
+    
+    
 
     // Initial call to fetch and display users
     fetchAndDisplayUsers();

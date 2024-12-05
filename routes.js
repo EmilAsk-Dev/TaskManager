@@ -7,15 +7,11 @@ const { checkAdmin, checkLoggedin } = require('./services/checkAdmin');
 const userService = require('./services/userService');
 const { 
     addTask, 
-    readTasks, 
-    getHighPrioTask, 
     markTaskAsCompleted, 
     removeTasks, 
-    addCategory, 
-    readCategories, 
-    deleteCategory,
-    assignCategoryToTask,
-    getTasksByCategory,    
+    getTasks,
+    unmarkTaskAsCompleted ,
+    getSortedTasks
 } = require('./services/taskService'); // Include addCategory, readCategories, deleteCategory functions
 const fs = require('fs');
 const sql = require('mssql');
@@ -28,9 +24,9 @@ router.use(express.static(path.join(__dirname, '.', 'public')));
 
 // Route to serve the home page
 router.get('/', async (req, res) => {
-    // Check if req.session.user exists and if isAdmin is defined, otherwise default to false
-    const isAdmin = req.session.user && typeof req.session.user.isAdmin !== 'undefined' ? req.session.user.isAdmin : false;
-
+    // Check if req.session.user exists, and use a default value for role if not available
+    const isAdmin = req.session.user && typeof req.session.user.role !== 'undefined' ? req.session.user.role : false;
+    
     // Render the home page with the user and isAdmin values
     res.render('home', { 
         user: req.session.user,
@@ -111,47 +107,87 @@ router.post('/tasks/:taskId/complete', async (req, res) => {
     }
 });
 
-// Route to fetch tasks for the logged-in user
-router.get('/tasks', async (req, res) => {    
+router.post('/tasks/:taskId/unmark', async (req, res) => {
+    const taskId = req.params.taskId;
+    
     try {
-        const username = req.session.user.username;
-        const tasks = await readTasks(username);
-        res.json(tasks);
+        const result = await unmarkTaskAsCompleted(taskId);
+        if (result.success) {
+            res.status(200).json({ success: true, message: 'Task unmarked as completed' });
+        } else {
+            res.status(400).json({ success: false, message: 'Failed to unmark task as completed' });
+        }
     } catch (error) {
-        console.error('Error fetching tasks:', error.message);
-        res.status(500).json({ success: false, message: 'Failed to fetch tasks' });
+        console.error('Error unmarking task as completed:', error.message);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
+router.get('/tasks',async (req, res) => {  
+    try {
+        
+        if (!req.session || !req.session.user) {
+            return res.status(401).json({
+                success: false,
+                message: 'User not logged in',
+            });
+        }
+
+        const userId = req.session.user.id;        
+        const tasks = await getTasks(userId);
+
+        res.json({
+            success: true,
+            tasks: tasks,
+            message: 'Tasks fetched successfully',
+        });
+    } catch (err) {
+        console.error('Error fetching tasks:', err.message);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching tasks',
+        });
+    }
+});
+
+router.get('/tasks/sorted', async (req, res) => {
+    try {
+        const { status, priority, page = 1, pageSize = 10 } = req.query;
+        
+        // Fetch sorted tasks
+        const tasks = await TaskService.getSortedTasks(status, priority, parseInt(page), parseInt(pageSize));
+
+        // Send response with sorted tasks
+        res.json({
+            success: true,
+            tasks: tasks,
+            message: 'Sorted tasks fetched successfully',
+        });
+    } catch (err) {
+        console.error('Error fetching sorted tasks:', err.message);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching sorted tasks',
+        });
     }
 });
 
 router.get('/checkuser', async (req, res) => {    
     try {
+        // Extract the username from the query parameters
+        const username = req.query.username;
 
+        if (!username) {
+            return res.status(400).json({ success: false, message: 'Username is required' });
+        }
+
+        // Fetch tasks for the specific user using the username
+        const tasks = await readTasksWithUsername(username); // Assuming readTasksWithUsername is a function that takes a username as an argument
         
-        const tasks = await readTasks(User);
-        res.json(tasks);
+        res.json(tasks); // Send back the tasks as a JSON response
     } catch (error) {
         console.error('Error fetching tasks:', error.message);
         res.status(500).json({ success: false, message: 'Failed to fetch tasks' });
-    }
-});
-
-// Route to fetch highest priority task for the logged-in user
-router.get('/highest-prio-task', async (req, res) => {
-    try {
-        if (!req.session.user) {
-            return res.status(401).send('User not logged in');
-        }
-
-        const username = req.session.user.username;
-        const task = await getHighPrioTask(username);
-        if (task) {
-            res.json(task);
-        } else {
-            res.status(404).send('No tasks found');
-        }
-    } catch (error) {
-        console.error('Error fetching highest priority task:', error.message);
-        res.status(500).json({ success: false, message: 'Failed to fetch highest priority task' });
     }
 });
 
@@ -174,21 +210,7 @@ router.post('/add-task', async (req, res) => {
 });
 
 // Route to remove tasks (newly added)
-router.delete('/tasks/:taskId', async (req, res) => {
-    const taskId = req.params.taskId;
 
-    try {
-        const result = await removeTasks([taskId]);
-        if (result.success) {
-            res.status(200).json({ success: true, message: 'Task deleted successfully' });
-        } else {
-            res.status(400).json({ success: false, message: 'Failed to delete task' });
-        }
-    } catch (error) {
-        console.error('Error deleting task:', error.message);
-        res.status(500).json({ success: false, message: 'Internal server error' });
-    }
-});
 
 // Route to handle logout
 router.get('/logout', (req, res) => {
@@ -202,90 +224,9 @@ router.get('/logout', (req, res) => {
 });
 
 // GET all categories
-router.get('/categories', async (req, res) => {
-    try {
-        const categories = await readCategories();
-        res.json(categories);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
 // POST a new category
-router.post('/categories', async (req, res) => {
-    const categoryData = {
-        name: req.body.name,
-        description: req.body.description,
-        created_by: req.session.user.username
-    };
-
-    try {
-        const newCategory = await addCategory(categoryData);
-        res.status(201).json(newCategory);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-});
-
 // DELETE a category
-router.delete('/categories/:categoryId', async (req, res) => {
-    const categoryId = req.params.categoryId;
-    try {
-        deleteCategory(categoryId)
-    }
-    catch{
-        log("cant connect to db")
-    }
-    
-});
+//Get task for category
 
-router.post('/tasks/:taskId/category', async (req, res) => {
-    const taskId = req.params.taskId;
-    const { categoryId } = req.body;
-
-    try {
-        const result = await assignCategoryToTask(taskId, categoryId);
-        if (result.success) {
-            res.status(200).json(result);
-        } else {
-            res.status(400).json({ success: false, message: 'Failed to assign category' });
-        }
-    } catch (error) {
-        console.error('Error assigning category to task:', error.message);
-        res.status(500).json({ success: false, message: 'Internal server error' });
-    }
-});
-
-router.get('/categories/:categoryId/tasks', async (req, res) => {
-    const categoryId = req.params.categoryId;
-
-    try {
-        const tasks = await getTasksByCategory(categoryId);
-        if (tasks) {
-            res.status(200).json(tasks);
-        } else {
-            res.status(404).json({ message: 'No tasks found for this category' });
-        }
-    } catch (error) {
-        console.error('Error fetching tasks for category:', error.message);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
-router.get("/users", async (req,res) =>{
-    try {
-        const Users = await userService.getAllUserInfo()
-        if(Users) {
-            res.status(200).json(Users)            
-        } else {
-            res.status(404).json({message: 'Cant get the Users'})
-        }
-    } 
-    catch (error){
-        console.error('Error fetching tasks for category:', error.message);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-
-})
 
 module.exports = router;

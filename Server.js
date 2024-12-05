@@ -7,6 +7,8 @@ const multer = require('multer');
 const fs = require('fs');
 const app = express();
 const port = 3000;
+const sql = require('mssql');
+const config = require('./services/dbConfig');
 
 // Middleware to parse JSON and handle cookies
 app.use(express.json());
@@ -37,18 +39,25 @@ app.use((req, res, next) => {
     next();
 });
 
-// this is for dev, auto cookie
-app.use((req, res, next) => {
-    req.session.user = {
-        id: 1,
-        username: 'Admin',
-        isAdmin: true
-    }; 
-    next();
-});
+// // this is for dev, auto cookie
+// app.use((req, res, next) => {
+//     req.session.user = {
+        
+//         username: 'Admin',
+//         Role: 1
+//     }; 
+//     next();
+// });
 
 
-
+async function checkDbConnection() {
+    try {
+        await sql.connect(config);
+        console.log('Connected to the database successfully!');
+    } catch (error) {
+        console.log('Can\'t connect to the database: ', error.message);
+    }
+}
 
 // Use the routes defined in routes.js
 app.use('/', routes);
@@ -56,4 +65,5 @@ app.use('/', routes);
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
+    checkDbConnection();
 });

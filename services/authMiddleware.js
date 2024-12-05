@@ -3,13 +3,15 @@ const userService = require('./userService');
 const authenticate = async (req, res, next) => {
     try {
         const { username, password } = req.body;
-
+        
         const user = await userService.authenticateUser(username, password);
 
         req.session.user = {
-            id: user.id,
-            username: user.username,
-            isAdmin: user.isAdmin
+            id: user.UserID,
+            username: user.Username,
+            email: user.Email,            
+            Role: user.RoleID,
+            roleName: user.RoleName
             
         };
 

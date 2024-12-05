@@ -2,25 +2,23 @@ const sql = require('mssql');
 const config = require('./dbConfig');
 
 // Function to add a new task
+// Function to add a new task
 const addTask = async (taskData, req) => {
     try {
         if (!req.session.user) throw new Error('User is not logged in');
 
         const { name, description, priority, dueDate } = taskData;
-        const createdBy = req.session.user.username;
+        const userId = req.session.user.UserID;
 
         const pool = await sql.connect(config);
         await pool.request()
-            .input('name', sql.VarChar, name)
-            .input('description', sql.VarChar, description)
-            .input('status', sql.Bit, 0)
-            .input('priority', sql.VarChar, priority)
-            .input('createdBy', sql.VarChar, createdBy)
-            .input('dueDate', sql.VarChar, dueDate)
-            .query(`
-                INSERT INTO Tasks (name, description, status, priority, createdBy)
-                VALUES (@name, @description, @status, @priority, @createdBy, @dueDate)
-            `);
+            .input('TaskName', sql.VarChar, name)
+            .input('Description', sql.Text, description)
+            .input('Priority', sql.Int, priority)
+            .input('Status', sql.VarChar, 'Pending')  
+            .input('UserID', sql.Int, userId)
+            .input('DueDate', sql.Date, dueDate)
+            .execute('AddTask'); 
 
         return { success: true, message: 'Task added successfully' };
     } catch (err) {
@@ -31,79 +29,15 @@ const addTask = async (taskData, req) => {
     }
 };
 
-// Function to read tasks for a specific user
-const readTasks = async (username) => {
-    try {
-        const pool = await sql.connect(config);
-        const result = await pool.request()
-            .input('username', sql.VarChar, username)
-            .query(`
-                SELECT *
-                FROM Tasks
-                WHERE createdBy = @username
-            `);
-
-        return result.recordset;
-    } catch (err) {
-        console.error('Error fetching tasks:', err.message);
-        throw err;
-    } finally {
-        await sql.close();
-    }
-};
-
-// Function to get the highest priority task for a specific user
-const getHighPrioTask = async (username) => {
-    try {
-        const pool = await sql.connect(config);
-        const result = await pool.request()
-            .input('username', sql.VarChar, username)
-            .query(`
-                SELECT TOP 1 *
-                FROM Tasks
-                WHERE createdBy = @username
-                ORDER BY priority DESC
-            `);
-
-        return result.recordset[0];
-    } catch (err) {
-        console.error('Error fetching highest priority task:', err.message);
-        throw err;
-    } finally {
-        await sql.close();
-    }
-};
-
-// Function to mark a task as completed
-const markTaskAsCompleted = async (taskId) => {
-    try {
-        const pool = await sql.connect(config);
-        await pool.request()
-            .input('taskId', sql.Int, taskId)
-            .query(`
-                UPDATE Tasks
-                SET status = 1
-                WHERE id = @taskId
-            `);
-
-        return { success: true, message: 'Task marked as completed' };
-    } catch (err) {
-        console.error('Error marking task as completed:', err.message);
-        return { success: false, message: 'Error marking task as completed' };
-    } finally {
-        await sql.close();
-    }
-};
-
 // Function to remove tasks
 const removeTasks = async (taskIds) => {
     try {
+        const taskIdString = taskIds.join(','); // Convert array to comma-separated string
+
         const pool = await sql.connect(config);
         await pool.request()
-            .query(`
-                DELETE FROM Tasks
-                WHERE id IN (${taskIds.map(id => `'${id}'`).join(',')})
-            `);
+            .input('TaskIDs', sql.NVarChar, taskIdString)
+            .execute('RemoveTasks'); // Call the stored procedure
 
         return { success: true, message: 'Tasks removed successfully' };
     } catch (err) {
@@ -114,115 +48,92 @@ const removeTasks = async (taskIds) => {
     }
 };
 
-// Function to add a new category
-const addCategory = async (categoryData) => {
-    try {
-        const { name, description, created_by } = categoryData;
+// Fetch sorted tasks (this will be used in the route)
 
-        const pool = await sql.connect(config);
-        await pool.request()
-            .input('name', sql.VarChar, name)
-            .input('description', sql.VarChar, description)
-            .input('created_by', sql.VarChar, created_by)
-            .query(`
-                INSERT INTO Categories (name, description, created_by)
-                VALUES (@name, @description, @created_by)
-            `);
 
-        return { success: true, message: 'Category added successfully' };
-    } catch (err) {
-        console.error('Error adding category:', err.message);
-        return { success: false, message: 'Error adding category' };
-    } finally {
-        await sql.close();
-    }
-};
 
-// Function to read all categories
-const readCategories = async () => {
-    try {
-        const pool = await sql.connect(config);
-        const result = await pool.request().query(`
-            SELECT *
-            FROM Categories
-        `);
-
-        return result.recordset;
-    } catch (err) {
-        console.error('Error fetching categories:', err.message);
-        throw err;
-    } finally {
-        await sql.close();
-    }
-};
-
-// Function to delete a category
-const deleteCategory = async (categoryId) => {
+// Function to mark a task as completed
+const markTaskAsCompleted = async (taskId) => {
     try {
         const pool = await sql.connect(config);
         await pool.request()
-            .input('categoryId', sql.Int, categoryId)
-            .query(`
-                DELETE FROM Categories
-                WHERE id = @categoryId
-            `);
+            .input('TaskID', sql.Int, taskId)
+            .execute('MarkTaskAsCompleted'); // Call the stored procedure
 
-        return { success: true, message: 'Category deleted successfully' };
+        return { success: true, message: 'Task marked as completed successfully' };
     } catch (err) {
-        console.error('Error deleting category:', err.message);
-        return { success: false, message: 'Error deleting category' };
+        console.error('Error marking task as completed:', err.message);
+        return { success: false, message: 'Error marking task as completed' };
     } finally {
         await sql.close();
     }
 };
 
-const assignCategoryToTask = async (taskId, categoryId) => {
+const unmarkTaskAsCompleted = async (taskId) => {
     try {
         const pool = await sql.connect(config);
         await pool.request()
-            .input('taskId', sql.Int, taskId)
-            .input('categoryId', sql.Int, categoryId)
-            .query(`
-                UPDATE Tasks
-                SET categoryId = @categoryId
-                WHERE id = @taskId
-            `);
+            .input('TaskID', sql.Int, taskId)
+            .execute('UnmarkTaskAsCompleted'); // Call the stored procedure
 
-        return { success: true, message: 'Category assigned to task successfully' };
+        return { success: true, message: 'Task unmarked as completed successfully' };
     } catch (err) {
-        console.error('Error assigning category to task:', err.message);
-        return { success: false, message: 'Error assigning category to task' };
+        console.error('Error unmarking task as completed:', err.message);
+        return { success: false, message: 'Error unmarking task as completed' };
     } finally {
         await sql.close();
     }
 };
 
-async function getTasksByCategory(categoryId) {
+// Fetch sorted tasks from the database
+async function getSortedTasks(status = null, priority = null, page = 1, pageSize = 10) {
     try {
-        let pool = await sql.connect(config);
-        let result = await pool.request()
-            .input('categoryId', sql.Int, categoryId)
-            .query('SELECT * FROM Tasks WHERE categoryId = @categoryId');
-        return result.recordset;
-    } catch (err) {
-        console.error('Error fetching tasks by category:', err.message);
-        throw err;
+        // Establish a connection to the database
+        const pool = await sql.connect(config);
+
+        // Execute the stored procedure with optional parameters
+        const result = await pool.request()
+            .input('Status', sql.VarChar, status)
+            .input('Priority', sql.Int, priority)
+            .input('PageNumber', sql.Int, page)
+            .input('PageSize', sql.Int, pageSize)
+            .execute('GetUpcomingTasks');
+
+        return result.recordset; // Return the sorted tasks
+    } catch (error) {
+        console.error("Error fetching sorted tasks:", error);
+        throw new Error("Failed to fetch sorted tasks");
     }
 }
+
+// Fetch all tasks (no sorting)
+const getTasks = async (userId) => {
+    try {
+        const pool = await sql.connect(config);
+        const result = await pool.request()
+            .input('UserID', sql.Int, userId)
+            .execute('ReadTasks'); // Execute the stored procedure to get tasks for a user
+
+        return result.recordset; // Return tasks
+    } catch (error) {
+        console.error('Error fetching tasks:', error);
+        throw new Error('Failed to fetch tasks');
+    } finally {
+        await sql.close();
+    }
+};
+
+
 
 
 
 module.exports = {
-    addTask,
-    readTasks,
-    getHighPrioTask,
+    addTask,    
+    removeTasks,    
+    unmarkTaskAsCompleted,
     markTaskAsCompleted,
-    removeTasks,
-    addCategory,
-    readCategories,
-    deleteCategory,
-    assignCategoryToTask,
-    getTasksByCategory
+    getSortedTasks,
+    getTasks
 };
 
 
