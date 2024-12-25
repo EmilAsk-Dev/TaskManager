@@ -39,15 +39,17 @@ app.use((req, res, next) => {
     next();
 });
 
-// // this is for dev, auto cookie
-// app.use((req, res, next) => {
-//     req.session.user = {
-        
-//         username: 'Admin',
-//         Role: 1
-//     }; 
-//     next();
-// });
+// this is for dev, auto cookie
+app.use((req, res, next) => {
+    req.session.user = {
+        id: 1,
+        username: 'admin',
+        email: 'admin1@example.com',            
+        Role: 1,
+        roleName: 'admin'        
+    };
+    next();
+});
 
 
 async function checkDbConnection() {

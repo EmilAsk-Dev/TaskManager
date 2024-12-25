@@ -1,144 +1,3 @@
-body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.container {
-    display: flex;
-    height: 100vh;
-    position: relative;
-}
-
-/* Sidebar Styles */
-.sidebar {
-    background-color: #5C52C7;
-    width: 250px; /* Increased width */
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    position: absolute; 
-    left: -320px; /* Adjusted for new width */
-    transition: left 0.5s ease-in-out;
-    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.15);
-}
-
-.nav-links-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1; /* Make sure it takes available space */
-    width: 100%;
-}
-
-.sidebar.open {
-    left: 0;
-}
-
-.sidebar-toggle-btn {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background-color: #5C52C7;
-    color: white;
-    border: none;
-    padding: 15px;
-    cursor: pointer;
-    font-size: 24px;
-    border-radius: 50%;
-    transition: transform 0.3s ease-in-out;
-    z-index: 1000;
-    transform: translateX(-150px); 
-}
-
-.sidebar-toggle-btn:hover {
-    transform: scale(1.2);
-}
-
-.profile-image {
-    width: 134px;
-    height: 134px;
-    border-radius: 50%;
-    transition: transform 0.3s ease-in-out;
-}
-
-.profile-image:hover {
-    transform: scale(1.1);
-}
-
-.profile-actions {
-    width: 24px;
-    height: 24px;
-    background-color: #6B5FD5;
-    border-radius: 50%;
-}
-
-.nav-link {
-    color: white;
-    text-decoration: none;
-    font-size: 18.7px;
-    font-weight: 700;
-    padding: 10px 0;
-    display: block;
-    width: 200px;
-    text-align: center; /* Center text inside link */
-}
-
-.nav-link:hover {
-    background-color: #6B5FD5;
-    border-radius: 8px;
-    padding: 10px;
-}
-
-.toggle-button {
-    width: 50px;
-    height: 50px;
-    background-color: #5C52C7;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    color: white;
-}
-
-.toggle-button:hover {
-    background-color: #6B5FD5;
-    transform: translateY(-50%) scale(1.1);
-}
-
-.toggle-button.open {
-    transform: translateY(-50%) rotate(180deg);
-}
-
-.toggle-half-circle {
-    position: absolute;
-    top: 50%; /* Center vertically */
-    transform: translateY(-50%);
-    right: -20px; /* Extend beyond the sidebar */
-    width: 40px;
-    height: 80px;
-    background-color: #5C52C7;
-    border-radius: 0 20px 20px 0; /* Half-circle shape */
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    z-index: 1000; /* Ensure visibility above all elements */
-    transition: transform 0.3s ease-in-out;
-}
-
-/* Main Content Styles */
 .main-content {
     flex-grow: 1;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -161,14 +20,22 @@ body {
     margin-bottom: 20px;
 }
 
-/* Upcoming Tasks Styles */
 .upcoming-tasks {
+    position: relative;
     grid-column: 3 / 1;
     grid-row: 1 / 9;
     background-color: white;
     border-radius: 18px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    overflow-y: auto;  /* Enables scrolling */
+    height: auto;     /* Define a fixed height for the scrollable container */
+}
+
+.task-wrapper {
+    position: relative; /* Required to position the scrollbar */
+    height: 100%; /* Ensure the task list takes up full space */
+    overflow-y: auto; /* Enables scrolling */
 }
 
 .task-item {
@@ -188,6 +55,7 @@ body {
     border: 2px solid #5C52C7;
 }
 
+
 .task-name {
     flex-grow: 1;
     font-size: 18.7px;
@@ -201,13 +69,13 @@ body {
     align-items: center;
 }
 
+
 .task-menu {
     width: 20px;
     height: 20px;
     background-image: url('data:image/svg+xml;base64,...');
 }
 
-/* Categories Styles */
 .categories {
     grid-column: 9 / 11;
     grid-row: 1 / 9;
@@ -242,10 +110,12 @@ body {
     margin-left: 10px;
 }
 
+
 .category-actions {
     display: flex;
     align-items: center;
 }
+
 
 .category-menu {
     width: 20px;
@@ -253,7 +123,6 @@ body {
     background-image: url('data:image/svg+xml;base64,...');
 }
 
-/* Notifications, March 2022, Calendar View, Goal Progress Styles */
 .notifications{
     background-color: white;
     border-radius: 20px;
@@ -263,6 +132,7 @@ body {
     margin-bottom: 10px;
     margin-left: 15px;
 }
+
 .goal-progress{
     background-color: white;
     border-radius: 20px;
@@ -285,10 +155,6 @@ body {
     margin-left: 15px;
 }
 
-
-   
-
-
 .notifications {
     grid-column: 3 / 9;
     grid-row: 1 / 3;
@@ -308,13 +174,6 @@ body {
     grid-row: 5 / 9;
 }
 
-.nav-link:hover {
-    background-color: #6B5FD5;
-    border-radius: 8px;
-    padding: 10px;
-}
-/* Calendar Card Styles */
-/* Calendar Header */
 .calendar-header {
     display: grid;
     grid-template-columns: repeat(7, 1fr); /* 7 columns */
@@ -324,17 +183,12 @@ body {
     margin-bottom: 10px;
 }
 
-
-
 .calendar-header span {
     text-align: center;
     padding: 5px;
     font-size: 16px;
 }
 
-/* Calendar Body */
-/* Make the calendar body a flex container */
-/* Make sure the calendar takes up 100% width */
 .calendar-body {
     display: grid;
     grid-template-columns: repeat(7, 1fr); /* 7 equal-width columns */
@@ -343,7 +197,6 @@ body {
     box-sizing: border-box;
 }
 
-/* Styling for each day */
 .day {
     text-align: center;
     padding: 10px;
@@ -376,6 +229,7 @@ body {
 .day:hover {
     background-color: rgba(0, 128, 0, 0.2);
 }
+
 
 .modal {
     display: none; /* Hidden by default */
@@ -417,15 +271,6 @@ body {
 }
 
 /* Styling for the modal content */
-.modal-content {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    width: 70%;
-    margin: auto;
-    max-height: 80vh;
-    overflow-y: auto;
-}
 
 /* Task item styling */
 .task-item {
@@ -500,4 +345,243 @@ body {
     font-size: 14px;
     color: gray;
 }
+/* Style for the category list container */
+#category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    /* No background color for the overall container */
+}
+
+/* Style for each category container */
+.category {
+    background-color: #ffffff;  /* White background for each category */
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;  /* Light border to visually separate categories */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover effect for categories */
+.category:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background-color: #f1f8ff;  /* Light blue background on hover */
+}
+
+/* Title style for each category */
+.category h2 {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+/* Optional: Style for category description (if you want to add it later) */
+.category p {
+    font-size: 1em;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+/* Optional: Add a border at the bottom of each category */
+.category:not(:last-child) {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+    #category-list {
+        padding: 15px;
+    }
+
+    .category {
+        padding: 15px;
+        font-size: 0.9em;
+    }
+
+    .category h2 {
+        font-size: 1.1em;
+    }
+}
+
+
+#task-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    padding-right: 40px; /* Space for the custom scrollbar */
+    height: 100%; /* Allow full height of task list */
+}
+
+#task-list p {
+    background-color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.task {
+    background-color: #ffffff; /* White background for the task card */
+    border-radius: 12px; /* Smooth, rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    width: 250px; /* Fixed width for uniformity */
+    padding: 20px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.task:hover {
+    transform: translateY(-10px); /* Lifts the card on hover */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
+}
+
+.task h4 {
+    font-size: 18px;
+    font-weight: bold;
+    color: black; /* Light blue for emphasis */
+    margin-bottom: 10px; /* Space between the title and description */
+    text-align: center;
+}
+
+.task p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #555; /* Medium gray for descriptions */
+}
+
+
+.section-header {
+    display: flex;
+    justify-content: space-between; /* Space between the title and button */
+    align-items: center; /* Vertically align them */
+  }
+.task p:last-child {
+    font-weight: bold;
+    color: black; /* Light blue for status */
+}
+
+.task-status-pending {
+    color: #ff9800; /* Orange for pending */
+}
+
+.task-status-completed {
+    color: #4caf50; /* Green for completed */
+}
+
+.task-status-overdue {
+    color: #f44336; /* Red for overdue */
+}
+
+button {
+    background-color: white; /* Red button background */
+    color: black; /* Black text */
+    padding: 10px 20px;
+    
+    border-radius: 8px; /* Rounds the corners */
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Adds smooth animations for hover */
+}
+
+button:hover {
+    background-color: #005b99; /* Darker blue on hover */
+}
+
+/* Modal container styles */
+#tasksForCategoryModal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Background overlay */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Make sure the modal appears on top */
+}
+
+/* Modal content styles */
+#tasksForCategoryModal .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-height: 80%; /* Ensure modal doesn't overflow the viewport */
+    overflow-y: hidden; /* Scroll if the content is too long */
+}
+
+/* Task list styling */
+#tasksForCategoryModal #taskList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#tasksForCategoryModal #taskList li {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#tasksForCategoryModal #taskList li:hover {
+    background-color: #f1f1f1;
+}
+
+/* Close button styling */
+#tasksForCategoryModal #closeModal {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 15px;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+#tasksForCategoryModal #closeModal:hover {
+    background-color: #0056b3;
+}
+
+/* Category buttons styles (with unique class name) */
+.category-button {
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.category-button:hover {
+    background-color: #218838;
+}
+
+/* Modal close functionality when clicking outside */
+#tasksForCategoryModal.open {
+    display: flex; /* Show modal when it's open */
+}
+
+.button-Add{
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+
+
+
 
