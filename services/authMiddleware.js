@@ -23,4 +23,25 @@ const authenticate = async (req, res, next) => {
     }
 };
 
+//FOR ADMIN DEV TESTING
+// const authenticate = async (req, res, next) => {
+//     try {        
+//         req.session.user = {
+//             id: 1,
+//             username: 'Admin',
+//             email: 'admin1@example.com',            
+//             Role: 1,
+//             roleName: 'Admin'
+            
+//         };
+//         next()
+
+//         console.log('Authenticated user:', req.session.user);
+//         next();
+//     } catch (error) {
+//         console.error('Authentication error:', error.message);
+//         res.status(401).json({ error: 'Unauthorized' });
+//     }
+// };
+
 module.exports = authenticate;

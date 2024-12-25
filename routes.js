@@ -5,6 +5,8 @@ const path = require('path');
 const authenticate = require('./services/authMiddleware');
 const { checkAdmin, checkLoggedin } = require('./services/checkAdmin');
 const userService = require('./services/userService');
+
+
 const { 
     addTask, 
     markTaskAsCompleted, 
@@ -13,6 +15,17 @@ const {
     unmarkTaskAsCompleted ,
     getSortedTasks
 } = require('./services/taskService'); // Include addCategory, readCategories, deleteCategory functions
+
+
+const {
+    getAllCategories,
+    getCategoryByID,
+    addCategory,
+    updateCategory,
+    deleteCategory,
+    GetCategoriesByUser,
+    getTasksByCategoryForUser
+} = require ('./services/CategoryService')
 const fs = require('fs');
 const sql = require('mssql');
 const { Console } = require('console');
@@ -90,39 +103,6 @@ router.get('/Task', checkLoggedin, (req, res) => {
     res.render('Task', { user: req.session.user });
 });
 
-// Route to mark a task as completed
-router.post('/tasks/:taskId/complete', async (req, res) => {
-    const taskId = req.params.taskId;
-
-    try { 
-        const result = await markTaskAsCompleted(taskId);
-        if (result.success) {
-            res.status(200).json({ success: true, message: 'Task marked as completed' });
-        } else {
-            res.status(400).json({ success: false, message: 'Failed to mark task as completed' });
-        }
-    } catch (error) {
-        console.error('Error marking task as completed:', error.message);
-        res.status(500).json({ success: false, message: 'Internal server error' });
-    }
-});
-
-router.post('/tasks/:taskId/unmark', async (req, res) => {
-    const taskId = req.params.taskId;
-    
-    try {
-        const result = await unmarkTaskAsCompleted(taskId);
-        if (result.success) {
-            res.status(200).json({ success: true, message: 'Task unmarked as completed' });
-        } else {
-            res.status(400).json({ success: false, message: 'Failed to unmark task as completed' });
-        }
-    } catch (error) {
-        console.error('Error unmarking task as completed:', error.message);
-        res.status(500).json({ success: false, message: 'Internal server error' });
-    }
-});
-
 router.get('/tasks',async (req, res) => {  
     try {
         
@@ -172,24 +152,6 @@ router.get('/tasks/sorted', async (req, res) => {
     }
 });
 
-router.get('/checkuser', async (req, res) => {    
-    try {
-        // Extract the username from the query parameters
-        const username = req.query.username;
-
-        if (!username) {
-            return res.status(400).json({ success: false, message: 'Username is required' });
-        }
-
-        // Fetch tasks for the specific user using the username
-        const tasks = await readTasksWithUsername(username); // Assuming readTasksWithUsername is a function that takes a username as an argument
-        
-        res.json(tasks); // Send back the tasks as a JSON response
-    } catch (error) {
-        console.error('Error fetching tasks:', error.message);
-        res.status(500).json({ success: false, message: 'Failed to fetch tasks' });
-    }
-});
 
 // Route to serve the AddTask page
 router.get('/AddTask', checkLoggedin, (req, res) => {
@@ -223,10 +185,146 @@ router.get('/logout', (req, res) => {
     });
 });
 
-// GET all categories
+//get categories
+router.get('/categories', async (req, res) => {
+    try {
+        // Check if user is authenticated
+        if (!req.session || !req.session.user) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'User not logged in' 
+            });
+        }
+
+        const { filter } = req.query; // Get 'filter' from query string
+        const userId = req.session.user.id;
+        
+        // Get categories for the user
+        let categories = await GetCategoriesByUser(userId);
+        
+        // Apply filter if it exists
+        if (filter) {
+            categories = categories.filter(category => 
+                category.name.toLowerCase().includes(filter.toLowerCase())
+            );
+        }
+
+        res.json({ 
+            success: true, 
+            categories 
+        });
+    } catch (err) {
+        console.error('Error fetching categories:', err.message);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Error fetching categories' 
+        });
+    }
+});
+
+router.get('/category/:categoryId', async (req, res) => {
+    let categoryId, userId; // Declare the variables at the top for global access
+    
+    try {
+        categoryId = req.params.categoryId;  // Get category ID from URL parameter
+        userId = req.session.user.id;  // Get user ID from the request (session, JWT, etc.)
+    } catch {
+        return res.status(500).json({
+            success: false,
+            message: 'User not Logged in'
+        });
+    }
+    
+    try {
+        console.log('Fetching tasks for CategoryID:', categoryId, 'and UserID:', userId);
+        
+        // Fetch tasks based on both categoryId and userId
+        const tasks = await getTasksByCategoryForUser(categoryId, userId);
+        
+        if (!tasks || tasks.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No tasks found for this category.'
+            });
+        }
+
+        res.json({
+            success: true,
+            tasks: tasks
+        });
+    } catch (err) {
+        console.error('Error fetching tasks for category:', err.message);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching tasks for category'
+        });
+    }
+});
+
+
+
+// router.get('/tasks/:id/categories', async (req, res) => {
+//     const { id } = req.params; // Task ID
+//     const userId = req.session.user.id;
+//     try {
+//         const categories = await GetCategoriesByTask(id, userId);
+//         res.json({ success: true, categories });
+//     } catch (err) {
+//         res.status(500).json({ success: false, message: 'Error fetching categories' });
+//     }
+// });
+
 // POST a new category
+router.post('Tasks/categories', async (req, res) => {
+    try {
+        const { name } = req.body;
+        if (!name) {
+            return res.status(400).json({ success: false, message: 'Category name is required.' });
+        }
+
+        const newCategory = await addCategory(name); // Assume this function adds the category to the database
+        res.json({ success: true, category: newCategory });
+    } catch (err) {
+        console.error('Error adding category:', err.message);
+        res.status(500).json({ success: false, message: 'Error adding category' });
+    }
+});
+
 // DELETE a category
-//Get task for category
+router.delete('/categories/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleted = await deleteCategory(id); // Assume this function deletes the category from the database
+        if (!deleted) {
+            return res.status(404).json({ success: false, message: 'Category not found.' });
+        }
+
+        res.json({ success: true, message: 'Category deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting category:', err.message);
+        res.status(500).json({ success: false, message: 'Error deleting category' });
+    }
+});
+
+
+router.get('/checkuser', async (req, res) => {    
+    try {
+        // Extract the username from the query parameters
+        const username = req.query.username;
+
+        if (!username) {
+            return res.status(400).json({ success: false, message: 'Username is required' });
+        }
+
+        // Fetch tasks for the specific user using the username
+        const tasks = await readTasksWithUsername(username); // Assuming readTasksWithUsername is a function that takes a username as an argument
+        
+        res.json(tasks); // Send back the tasks as a JSON response
+    } catch (error) {
+        console.error('Error fetching tasks:', error.message);
+        res.status(500).json({ success: false, message: 'Failed to fetch tasks' });
+    }
+});
 
 
 module.exports = router;

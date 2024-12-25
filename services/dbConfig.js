@@ -7,7 +7,7 @@ const config = {
     server: 'localhost',
     database: 'TaskManager',
     options: {
-        encrypt: false,
+        encrypt: true,
         trustServerCertificate: true
     }
 };
