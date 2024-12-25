@@ -1,0 +1,587 @@
+.main-content {
+    flex-grow: 1;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 5px;
+    transition: margin-left 0.5s ease;
+}
+
+.main-content.shrink {
+    margin-left: 325px; /* Adjusted for new width */
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+.upcoming-tasks {
+    position: relative;
+    grid-column: 3 / 1;
+    grid-row: 1 / 9;
+    background-color: white;
+    border-radius: 18px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    overflow-y: auto;  /* Enables scrolling */
+    height: auto;     /* Define a fixed height for the scrollable container */
+}
+
+.task-wrapper {
+    position: relative; /* Required to position the scrollbar */
+    height: 100%; /* Ensure the task list takes up full space */
+    overflow-y: auto; /* Enables scrolling */
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid #5C52C7;
+}
+
+
+.task-name {
+    flex-grow: 1;
+    font-size: 18.7px;
+    font-weight: 700;
+    color: #333333;
+    margin-left: 10px;
+}
+
+.task-actions {
+    display: flex;
+    align-items: center;
+}
+
+
+.task-menu {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;base64,...');
+}
+
+.categories {
+    grid-column: 9 / 11;
+    grid-row: 1 / 9;
+    background-color: white;
+    border-radius: 18px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.category-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid #5C52C7;
+}
+
+.category-name {
+    flex-grow: 1;
+    font-size: 18.7px;
+    font-weight: 700;
+    color: #333333;
+    margin-left: 10px;
+}
+
+
+.category-actions {
+    display: flex;
+    align-items: center;
+}
+
+
+.category-menu {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;base64,...');
+}
+
+.notifications{
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;    
+    margin-right: 15px;
+    margin-bottom: 10px;
+    margin-left: 15px;
+}
+
+.goal-progress{
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 10px;
+    margin-right: 15px;
+    margin-left: 15px;}
+
+.march-2022,
+.calendar-view
+ {
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 10px;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    margin-left: 15px;
+}
+
+.notifications {
+    grid-column: 3 / 9;
+    grid-row: 1 / 3;
+}
+
+.march-2022 {
+    grid-column: 3 / 6;
+    grid-row: 3 / 5;
+}
+.calendar-view {
+    grid-column: 6 / 9;
+    grid-row: 3 / 5;
+}
+
+.goal-progress {
+    grid-column: 3 / 9;
+    grid-row: 5 / 9;
+}
+
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 columns */
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 0;
+    margin-bottom: 10px;
+}
+
+.calendar-header span {
+    text-align: center;
+    padding: 5px;
+    font-size: 16px;
+}
+
+.calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 equal-width columns */
+    gap: 1px; /* Optional: creates a gap between days */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.day {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px; /* Adjust size of the day text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.day.task-day {
+    background-color: green;
+    color: white;
+}
+
+/* Task day highlighting */
+.day.task-day {
+    background-color: green;
+    color: white;
+}
+
+/* Highlight the current day */
+.day.highlight {
+    border: 2px solid green;
+}
+
+/* Optionally, add a hover effect for better UX */
+.day:hover {
+    background-color: rgba(0, 128, 0, 0.2);
+}
+
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4); /* Black with opacity */
+    padding-top: 60px;
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+}
+
+/* Close button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Styling for the modal content */
+
+/* Task item styling */
+.task-item {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.task-header {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.task-header h4 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.task-header p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+/* Task rows (Description, Status) */
+.task-body {
+    margin: 10px 0;
+}
+
+/* Each task row styling */
+.task-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+/* Styling for columns within the task row */
+.task-column {
+    width: 45%;
+    font-size: 14px;
+}
+
+/* Highlight the title and the description for better readability */
+.task-column strong {
+    font-weight: bold;
+    color: #333;
+}
+
+.task-column {
+    color: #555;
+}
+
+/* Styling for the modal background and overlay */
+#taskModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.task-item .task-name {
+    margin-right: 10px; /* Add space between task name and due date */
+}
+
+.task-item .due-date {
+    font-size: 14px;
+    color: gray;
+}
+/* Style for the category list container */
+#category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    /* No background color for the overall container */
+}
+
+/* Style for each category container */
+.category {
+    background-color: #ffffff;  /* White background for each category */
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;  /* Light border to visually separate categories */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover effect for categories */
+.category:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background-color: #f1f8ff;  /* Light blue background on hover */
+}
+
+/* Title style for each category */
+.category h2 {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+/* Optional: Style for category description (if you want to add it later) */
+.category p {
+    font-size: 1em;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+/* Optional: Add a border at the bottom of each category */
+.category:not(:last-child) {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+    #category-list {
+        padding: 15px;
+    }
+
+    .category {
+        padding: 15px;
+        font-size: 0.9em;
+    }
+
+    .category h2 {
+        font-size: 1.1em;
+    }
+}
+
+
+#task-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    padding-right: 40px; /* Space for the custom scrollbar */
+    height: 100%; /* Allow full height of task list */
+}
+
+#task-list p {
+    background-color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.task {
+    background-color: #ffffff; /* White background for the task card */
+    border-radius: 12px; /* Smooth, rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    width: 250px; /* Fixed width for uniformity */
+    padding: 20px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.task:hover {
+    transform: translateY(-10px); /* Lifts the card on hover */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
+}
+
+.task h4 {
+    font-size: 18px;
+    font-weight: bold;
+    color: black; /* Light blue for emphasis */
+    margin-bottom: 10px; /* Space between the title and description */
+    text-align: center;
+}
+
+.task p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #555; /* Medium gray for descriptions */
+}
+
+
+.section-header {
+    display: flex;
+    justify-content: space-between; /* Space between the title and button */
+    align-items: center; /* Vertically align them */
+  }
+.task p:last-child {
+    font-weight: bold;
+    color: black; /* Light blue for status */
+}
+
+.task-status-pending {
+    color: #ff9800; /* Orange for pending */
+}
+
+.task-status-completed {
+    color: #4caf50; /* Green for completed */
+}
+
+.task-status-overdue {
+    color: #f44336; /* Red for overdue */
+}
+
+button {
+    background-color: white; /* Red button background */
+    color: black; /* Black text */
+    padding: 10px 20px;
+    
+    border-radius: 8px; /* Rounds the corners */
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Adds smooth animations for hover */
+}
+
+button:hover {
+    background-color: #005b99; /* Darker blue on hover */
+}
+
+/* Modal container styles */
+#tasksForCategoryModal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Background overlay */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Make sure the modal appears on top */
+}
+
+/* Modal content styles */
+#tasksForCategoryModal .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-height: 80%; /* Ensure modal doesn't overflow the viewport */
+    overflow-y: hidden; /* Scroll if the content is too long */
+}
+
+/* Task list styling */
+#tasksForCategoryModal #taskList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#tasksForCategoryModal #taskList li {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#tasksForCategoryModal #taskList li:hover {
+    background-color: #f1f1f1;
+}
+
+/* Close button styling */
+#tasksForCategoryModal #closeModal {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 15px;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+#tasksForCategoryModal #closeModal:hover {
+    background-color: #0056b3;
+}
+
+/* Category buttons styles (with unique class name) */
+.category-button {
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.category-button:hover {
+    background-color: #218838;
+}
+
+/* Modal close functionality when clicking outside */
+#tasksForCategoryModal.open {
+    display: flex; /* Show modal when it's open */
+}
+
+.button-Add{
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+
+
+
+

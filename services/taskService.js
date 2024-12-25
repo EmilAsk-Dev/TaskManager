@@ -2,7 +2,6 @@ const sql = require('mssql');
 const config = require('./dbConfig');
 
 // Function to add a new task
-// Function to add a new task
 const addTask = async (taskData, req) => {
     try {
         if (!req.session.user) throw new Error('User is not logged in');
