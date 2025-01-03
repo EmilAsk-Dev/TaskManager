@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashBoard.css">
+</head>
+<body class="dark-mode">
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="/svg/Logo.png" alt="Logo" class="logo">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <div class="nav-header">
+                            <span class="icon">🏠</span>
+                            <span class="nav-title">Home</span>
+                            <span class="nav-arrow">▼</span>
+                        </div>
+                        <ul class="nav-dropdown">
+                            <li class="dropdown-item">Dashboard</li>
+                            <li class="dropdown-item">Overview</li>
+                            <li class="dropdown-item">My Tasks</li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <div class="nav-header">
+                            <span class="icon">📝</span>
+                            <span class="nav-title">My Work</span>
+                            <span class="nav-arrow">▼</span>
+                        </div>
+                        <ul class="nav-dropdown">
+                            <li class="dropdown-item">All Tasks</li>
+                            <li class="dropdown-item">Completed</li>
+                            <li class="dropdown-item">In Progress</li>
+                        </ul>
+                    </li>
+        
+                    <li class="nav-item">
+                        <div class="nav-header">
+                            <span class="icon">⭐</span>
+                            <span class="nav-title">Favorites</span>
+                            <span class="nav-arrow">▼</span>
+                        </div>
+                        <ul class="nav-dropdown" id="favorites-list">
+                            <!-- Populated dynamically -->
+                        </ul>
+                    </li>
+        
+                    <li class="nav-item">
+                        <div class="nav-header">
+                            <span class="icon">📁</span>
+                            <span class="nav-title">Workspaces</span>
+                            <span class="nav-arrow">▼</span>
+                        </div>
+                        <ul class="nav-dropdown" id="workspaces-list">
+                            <!-- Populated dynamically -->
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-actions">
+                    <div class="header">
+                        <div class="header-left">
+                            <h1>Good morning, Emil!</h1>
+                        </div>
+                        <div class="header-right">
+                            <button class="quick-search">Quick Search</button>
+                            <button id="darkModeToggle" class="dark-mode-toggle">
+                                <span class="toggle-circle"></span>
+                            </button>
+                            <button class="icon-button">🔔</button>
+                            <button class="icon-button">👤</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <section class="recently-visited">
+                    <h2>Recently Visited</h2>
+                    <div class="recent-cards" id="recentCardsContainer"></div>
+                </section>
+            </div>
+                        
+            <section class="update-feed">
+                <h2>Update feed (Inbox) <span class="badge">2</span></h2>
+                <div class="feed-items">
+                    <div class="feed-item">
+                        <div class="feed-avatar"></div>
+                        <div class="feed-content">
+                            <p>Invite your teammates and start collaborating</p>
+                            <div class="feed-actions">
+                                <button class="btn-secondary">No thanks</button>
+                                <button class="btn-primary">Invite</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feed-item">
+                        <div class="feed-avatar"></div>
+                        <div class="feed-content">
+                            <p>Roy Mann mentioned you in Task #123</p>
+                            <div class="feed-actions">
+                                <button class="btn-secondary">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Sidebar moved inside main -->
+            
+        </main>
+        <aside class="profile-sidebar">
+            <div class="profile-completion">
+                <h2>Complete Your Profile</h2>
+                <ul class="completion-tasks">
+                    <li class="task-item completed">
+                        <span class="check-icon">✓</span>
+                        Setup Account
+                    </li>
+                    <li class="task-item">
+                        Upload Your Photo
+                    </li>
+                    <li class="task-item completed">
+                        <span class="check-icon">✓</span>
+                        Invite Team Members
+                    </li>
+                    <li class="task-item">
+                        Complete Profile
+                    </li>
+                    <li class="task-item">
+                        Install Our Mobile App 
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+    <script src="dashBoard.js"></script>
+</body>
+</html>
