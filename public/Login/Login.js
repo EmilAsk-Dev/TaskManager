@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {                
-                window.location.href = '/task'; // Redirect to a protected page
+                window.location.href = '/Dashboard'; // Redirect to a protected page
             } else {
                 alert('Login failed: ' + data.message);
             }

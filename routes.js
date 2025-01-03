@@ -16,7 +16,6 @@ const {
     getSortedTasks
 } = require('./services/taskService'); // Include addCategory, readCategories, deleteCategory functions
 
-
 const {
     getAllCategories,
     getCategoryByID,
@@ -52,7 +51,7 @@ router.get('/', async (req, res) => {
 // Route to serve the Login
 router.get('/Login', (req, res) => {
     if(req.session.user){
-        res.redirect("/Task")
+        res.redirect("/Dashboard")
     }    
     res.render('Login', { user: req.session.user });
 });
@@ -94,13 +93,13 @@ router.get('/adminPage', checkAdmin, (req, res) => {
 });
 
 // Route to serve the Task page (requires user to be logged in)
-router.get('/Task', checkLoggedin, (req, res) => {
+router.get('/Dashboard', checkLoggedin, (req, res) => {
     if (!req.session.user) {
         res.redirect('/login');
         return;
     }
 
-    res.render('Task', { user: req.session.user });
+    res.render('Dashboard', { user: req.session.user });
 });
 
 router.get('/tasks',async (req, res) => {  
