@@ -1,0 +1,118 @@
+const express = require('express');
+const config = require('./services/dbConfig');
+const router = express.Router();
+const path = require('path');
+const authenticate = require('./services/authMiddleware');
+const { checkAdmin, checkLoggedin } = require('./services/LoginChecks');
+const userService = require('./services/userService');
+const { users, workspaces } = require('./fakeData'); // Import fake data
+
+
+const fs = require('fs');
+const sql = require('mssql');
+const { Console } = require('console');
+
+// Middleware to parse JSON and handle cookies
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
+router.use(express.static(path.join(__dirname, '.', 'public')));
+
+// Route to serve the login page
+router.get('/', async (req, res) => {
+    // Check if req.session.user exists, and use a default value for role if not available
+    const isAdmin = req.session.user && typeof req.session.user.role !== 'undefined' ? req.session.user.role : false;
+    res.render('Login', { user: req.session.user });
+});
+
+
+
+// Route to serve the Login
+router.get('/Login', (req, res) => {
+    if(req.session.user){
+        res.redirect("/Dashboard")
+    }
+    res.render('Login', { user: req.session.user });
+});
+
+// Route to handle login (authentication middleware added)
+router.post('/Login', authenticate, (req, res) => {
+    
+    res.cookie('authToken', req.session.user.username, { httpOnly: true, secure: false });
+    res.status(200).json({ success: true, message: 'Login successful' });  
+});
+
+router.get('/dashboard', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/login');
+        return;
+    }
+
+    try {
+        const pool = await sql.connect(config);
+        const result = await pool.request()
+            .input('userId', sql.Int, req.session.user.UserID) // Assuming you store user ID in session
+            .query('SELECT * FROM Workspaces WHERE UserID = @userId'); // Fetch workspaces for the user
+
+        const workspaces = result.recordset;
+
+        res.render('Dashboard', {
+            user: req.session.user,
+            workspaces: workspaces // Pass workspaces to the view
+        });
+
+    } catch (error) {
+        console.error('Error fetching workspaces:', error);
+        res.status(500).send('Server Error');
+    }
+});
+
+// Route to handle logout
+router.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.redirect('/');
+        }
+        res.clearCookie('connect.sid');
+        res.redirect('/login');
+    });
+});
+
+
+router.get('/workspace/:workspaceId', async (req, res) => {
+    const workspaceId = req.params.workspaceId;
+    
+    // Check if the user is logged in
+    if (!req.session.user) {
+        res.redirect('/login');
+        return;
+    }
+
+    try {
+        // Fetch workspace data based on the workspaceId
+        const pool = await sql.connect(config);
+        const result = await pool.request()
+            .input('workspaceId', sql.Int, workspaceId)
+            .query('SELECT * FROM Workspaces WHERE WorkspaceID = @workspaceId');
+
+        if (result.recordset.length === 0) {
+            res.status(404).send('Workspace not found');
+            return;
+        }
+
+        const workspace = result.recordset[0];  // Assuming single result
+
+        // Render the workspace page with the workspace data
+        res.render('Workspace', {
+            workspace: workspace,
+            user: req.session.user
+        });
+
+    } catch (error) {
+        console.error('Error fetching workspace data:', error);
+        res.status(500).send('Server Error');
+    }
+});
+
+
+
+module.exports = router;

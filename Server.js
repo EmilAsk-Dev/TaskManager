@@ -3,53 +3,40 @@ const routes = require('./routes');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const path = require('path');
-const multer = require('multer');
-const fs = require('fs');
-const app = express();
-const port = 3000;
 const sql = require('mssql');
 const config = require('./services/dbConfig');
+
+const app = express();
+const port = 3000;
 
 // Middleware to parse JSON and handle cookies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Serve static files
-app.use('/Svg', express.static(__dirname + '/Svg'));
+// Serve static files from the 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Set view engine (EJS in this case)
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 // Session middleware configuration
 app.use(session({
-    secret: 'your_secret_key',  // Replace with a strong secret for production
+    secret: 'your_secret_key',  // Replace with a strong secret in production
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: false,  // Set to true if using HTTPS
-        maxAge: 24 * 60 * 60 * 1000  // Session expiration time in milliseconds (e.g., 1 day)
+        secure: false,  
+        maxAge: 24 * 60 * 60 * 1000  
     }
 }));
 
-app.set('views', path.join(__dirname, 'views')); // Set the views directory
-app.set('view engine', 'ejs');
 
-// Custom middleware to log requests
 app.use((req, res, next) => {
     console.log(`${req.method} request for ${req.url}`);
     next();
 });
-
-// this is for dev, auto cookie
-// app.use((req, res, next) => {
-//     req.session.user = {
-//         id: 1,
-//         username: 'admin',
-//         email: 'admin1@example.com',            
-//         Role: 1,
-//         roleName: 'admin'        
-//     };
-//     next();
-// });
 
 
 async function checkDbConnection() {
@@ -61,11 +48,17 @@ async function checkDbConnection() {
     }
 }
 
-// Use the routes defined in routes.js
+// Use the routes defined in routes/index.js
 app.use('/', routes);
+
+// Error Handling
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
-    checkDbConnection();
+    checkDbConnection();  // Check DB connection once when the server starts
 });

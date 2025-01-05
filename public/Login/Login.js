@@ -11,19 +11,20 @@ document.addEventListener('DOMContentLoaded', function() {
             password: password.value
         };
 
-        fetch('/Login', {
-            method: 'POST', // Ensure the method is POST
+        // Send a POST request to /login to authenticate the user
+        fetch('/auth/login', {  // Adjusted to use /login route
+            method: 'POST', 
             headers: {
-                'Content-Type': 'application/json' // Send JSON data
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(loginData)
         })
-        .then(response => response.json())  // Expecting JSON response
+        .then(response => response.json())  
         .then(data => {
             if (data.success) {                
-                window.location.href = '/Dashboard'; // Redirect to a protected page
+                window.location.href = '/dashboard';  // Redirect to dashboard on success
             } else {
-                alert('Login failed: ' + data.message); // Show error message
+                alert('Login failed: ' + data.message);  // Show failure message
             }
         })
         .catch(error => {

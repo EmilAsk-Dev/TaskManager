@@ -1,47 +1,35 @@
-const userService = require('./userService');
+const authService = require('./authService'); // This will call your service to interact with DB
 
 const authenticate = async (req, res, next) => {
     try {
         const { username, password } = req.body;
+
+        if (!username || !password) {
+            return res.status(400).json({ error: 'Username and password are required' });
+        }
+
+        // Fetch user from the database (service layer)
+        const user = await authService.login(username, password);
         
-        const user = await userService.authenticateUser(username, password);
-
-        req.session.user = {
-            id: user.UserID,
-            username: user.Username,
-            email: user.Email,            
-            Role: user.RoleID,
-            roleName: user.RoleName
-            
-        };
-
-        console.log('Authenticated user:', req.session.user);
-        next();
+        // Check if user exists and password matches (plain text comparison)
+        if (user) {
+            // Store user details in session
+            req.session.user = {
+                id: user.UserID,
+                username: user.Username,
+                email: user.Email,
+                Role: user.RoleID,
+                roleName: user.RoleName
+            };
+            console.log('Authenticated user:', req.session.user);
+            return next(); // Proceed to the next middleware (or route handler)
+        } else {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
     } catch (error) {
         console.error('Authentication error:', error.message);
-        res.status(401).json({ error: 'Unauthorized' });
+        return res.status(500).json({ error: 'Server error during authentication' });
     }
 };
-
-//FOR ADMIN DEV TESTING
-// const authenticate = async (req, res, next) => {
-//     try {        
-//         req.session.user = {
-//             id: 1,
-//             username: 'Admin',
-//             email: 'admin1@example.com',            
-//             Role: 1,
-//             roleName: 'Admin'
-            
-//         };
-//         next()
-
-//         console.log('Authenticated user:', req.session.user);
-//         next();
-//     } catch (error) {
-//         console.error('Authentication error:', error.message);
-//         res.status(401).json({ error: 'Unauthorized' });
-//     }
-// };
 
 module.exports = authenticate;
