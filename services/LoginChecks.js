@@ -12,12 +12,12 @@ const checkAdmin = (req, res, next) => {
 };
 
 const checkLoggedin = (req, res, next) => {
-    next()
-    return
     if (req.session.user) {
+        console.log("next")
         next();
     } else {
         res.status(403).send('Forbidden: You do not have the necessary permissions');
+        console.log("Forbidden")
     }
 };
 

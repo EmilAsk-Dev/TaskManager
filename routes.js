@@ -3,7 +3,7 @@ const config = require('./services/dbConfig');
 const router = express.Router();
 const path = require('path');
 const authenticate = require('./services/authMiddleware');
-const { checkAdmin, checkLoggedin } = require('./services/checkAdmin');
+const { checkAdmin, checkLoggedin } = require('./services/LoginChecks');
 const userService = require('./services/userService');
 
 
@@ -34,16 +34,11 @@ router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 router.use(express.static(path.join(__dirname, '.', 'public')));
 
-// Route to serve the home page
+// Route to serve the login page
 router.get('/', async (req, res) => {
     // Check if req.session.user exists, and use a default value for role if not available
     const isAdmin = req.session.user && typeof req.session.user.role !== 'undefined' ? req.session.user.role : false;
-    
-    // Render the home page with the user and isAdmin values
-    res.render('home', { 
-        user: req.session.user,
-        isAdmin: isAdmin
-    });
+    res.render('Login', { user: req.session.user });
 });
 
 
@@ -52,48 +47,19 @@ router.get('/', async (req, res) => {
 router.get('/Login', (req, res) => {
     if(req.session.user){
         res.redirect("/Dashboard")
-    }    
+    }
     res.render('Login', { user: req.session.user });
 });
 
 // Route to handle login (authentication middleware added)
-router.post('/login', authenticate, (req, res) => {
+router.post('/Login', authenticate, (req, res) => {
+    
     res.cookie('authToken', req.session.user.username, { httpOnly: true, secure: false });
-    res.status(200).json({ success: true, message: 'Login successful' });
-});
-
-// Route to serve the CreateUser page
-router.get('/CreateUser', (req, res) => {
-    res.sendFile(path.join(__dirname, '.', 'public', 'CreateUser', 'CreateUser.html'));
-});
-
-// Route to handle user creation
-router.post('/create-user', async (req, res) => {
-    try {
-        const { username, password, isAdmin } = req.body;
-        const result = await userService.createUser({ username, password, isAdmin });
-        if (result.success) {
-            res.status(200).json({ success: true, message: result.message });
-        } else {
-            res.status(400).json({ success: false, message: result.message });
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
-    }
-});
-
-router.get('/adminPage', checkAdmin, (req, res) => {
-    if (!req.session.user) {
-        res.redirect('/login');
-        return;
-    }
-
-    res.render('adminPage', { user: req.session.user });
+    res.status(200).json({ success: true, message: 'Login successful' });  
 });
 
 // Route to serve the Task page (requires user to be logged in)
-router.get('/Dashboard', checkLoggedin, (req, res) => {
+router.get('/Dashboard', (req, res) => {
     if (!req.session.user) {
         res.redirect('/login');
         return;
@@ -101,62 +67,6 @@ router.get('/Dashboard', checkLoggedin, (req, res) => {
 
     res.render('Dashboard', { user: req.session.user });
 });
-
-router.get('/tasks',async (req, res) => {  
-    try {
-        
-        if (!req.session || !req.session.user) {
-            return res.status(401).json({
-                success: false,
-                message: 'User not logged in',
-            });
-        }
-
-        const userId = req.session.user.id;        
-        const tasks = await getTasks(userId);
-
-        res.json({
-            success: true,
-            tasks: tasks,
-            message: 'Tasks fetched successfully',
-        });
-    } catch (err) {
-        console.error('Error fetching tasks:', err.message);
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching tasks',
-        });
-    }
-});
-
-router.get('/tasks/sorted', async (req, res) => {
-    try {
-        const { status, priority, page = 1, pageSize = 10 } = req.query;
-        
-        // Fetch sorted tasks
-        const tasks = await TaskService.getSortedTasks(status, priority, parseInt(page), parseInt(pageSize));
-
-        // Send response with sorted tasks
-        res.json({
-            success: true,
-            tasks: tasks,
-            message: 'Sorted tasks fetched successfully',
-        });
-    } catch (err) {
-        console.error('Error fetching sorted tasks:', err.message);
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching sorted tasks',
-        });
-    }
-});
-
-
-
-
-
-
-
 
 // Route to handle logout
 router.get('/logout', (req, res) => {
@@ -172,27 +82,6 @@ router.get('/logout', (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/// Middleware to parse JSON request bodies
-router.use(express.json());
 
 // Placeholder data: Users, Workspaces, and Tasks
 const users = [

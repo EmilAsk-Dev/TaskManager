@@ -1,82 +1,102 @@
-body {
-    font-family: 'Roboto', sans-serif;
+/* Basic Reset */
+* {
     margin: 0;
     padding: 0;
-    color: #fff;
+    box-sizing: border-box;
+}
+
+/* Apply background color */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--primary-bg);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    overflow: hidden; /* Hide overflow to prevent scrollbars */
-    position: relative; /* Ensure position relative for absolute positioning of bubbles */
+    color: var(--text-primary);
 }
 
-.bubble-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Prevent clicks on bubbles */
-    z-index: 0; /* Ensure bubbles are behind other content */
+/* Variables for the colors */
+:root {
+    --primary-bg: #1f243c;
+    --sidebar-bg: #292f4c;
+    --card-bg: #32374f;
+    --hover-bg: #383e5c;
+    --primary-blue: #0073ea;
+    --text-primary: #ffffff;
+    --text-secondary: #676879;
+    --success-green: #00c875;
+    --header-bg: #32374f;
 }
 
-.bubble {
-    position: absolute;
-    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
-    width: 20px;
-    height: 20px;
-    border-radius: 50%; /* Circular shape */
-    animation: bubbleAnimation 10s linear infinite; /* Bubble animation */
+/* Login Container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-.container {
-    position: relative;
+/* Login Card */
+.login-card {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 8px;
     width: 300px;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 1; /* Ensure container is above bubbles */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
+.login-card h2 {
     text-align: center;
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 20px;
 }
 
-input {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+/* Input fields */
+.input-group {
+    margin-bottom: 15px;
 }
 
-button {
+.input-group label {
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
+    border: 1px solid var(--hover-bg);
+    border-radius: 4px;
+    background-color: var(--sidebar-bg);
+    color: var(--text-primary);
+    font-size: 16px;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-blue);
+    color: var(--text-primary);
+    font-size: 16px;
     border: none;
-    color: white;
-    border-radius: 3px;
+    border-radius: 4px;
     cursor: pointer;
-    margin-top: 10px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: var(--hover-bg);
 }
 
-@keyframes bubbleAnimation {
-    0% {
-        transform: translateY(100vh) translateX(calc(100vw * -1)); /* Start off the screen to the left */
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(-100vh) translateX(calc(100vw * 2)); /* Move off the screen to the right */
-        opacity: 0;
-    }
+/* Hover effects for inputs and button */
+input:hover,
+button:hover {
+    background-color: var(--hover-bg);
 }

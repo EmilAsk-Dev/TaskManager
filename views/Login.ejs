@@ -1,19 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="Login.css">
+    <link rel="stylesheet" href="/login/Login.css">
 </head>
 <body>
-    <div class="bubble-container"></div> <!-- Bubble container before .container -->
-    <div class="container">
-        <h1>Login</h1>
-        <input id="Username" type="text" placeholder="Username">
-        <input id="Password" type="password" placeholder="Password">
-        <button id="loginButton">Login</button>
-        <button id="gotoCreateUser">Create a user</button>
+
+    <div class="login-container">
+        <div class="login-card">
+            <h2>Login</h2>
+            <!-- Removed the form's action and method as we handle this via JS -->
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="Username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="Password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button id="loginButton">Login</button>
+            <div><a href="/createUser">Go to create account</a></div>
+        </div>
     </div>
 
-    <script src="Login.js"></script>
+    <script src="/login/Login.js"></script>
 </body>
 </html>
