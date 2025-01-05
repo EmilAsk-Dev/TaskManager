@@ -8,10 +8,12 @@
     --text-primary: #000000;  /* Dark text on light background */
     --text-secondary: #676879;
     --success-green: #00c875;
-    
-    --sidebar-width: 15%;
-    --main-content-width: 70%;
+    --header-bg: #f0f0f0;
+
+    --sidebar-width: 10%;
+    --main-content-width: 75%;
     --right-sidebar-width: 15%;
+    
 }
 
 /* Dark Mode Variables */
@@ -24,6 +26,8 @@ body.dark-mode {
     --text-primary: #ffffff;  /* Light text on dark background */
     --text-secondary: #676879;
     --success-green: #00c875;
+    --header-bg: #32374f;
+    
 }
 
 
@@ -246,11 +250,15 @@ body.dark-mode .dark-mode-toggle .toggle-circle {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--primary-bg);
+    background-color: var(--header-bg);
+    border-radius: 3px;
+    height: 60px;
 }
 
 .header-left {
     text-align: left;
+    
+    padding: 10px 5px 20px 5px;
 }
 
 .header-right {
@@ -304,7 +312,7 @@ h1 {
     overflow-x: auto;
     padding-bottom: 10px;
     width: 100%;
-    
+       
 }
 
 .recent-card {
@@ -315,6 +323,7 @@ h1 {
     width: 300px; /* Set a fixed width for each card */
     scroll-snap-align: start; /* Cards will snap to the left */
     margin-right: 16px; /* Optional: Adjust margin for spacing */
+    cursor: pointer; 
 }
 
 .recent-cards::-webkit-scrollbar {

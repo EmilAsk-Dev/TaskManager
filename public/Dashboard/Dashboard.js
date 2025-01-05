@@ -113,9 +113,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Generate cards from the array
         recentlyVisited.forEach(item => {
             // Create card container
+
             const card = document.createElement('div');
             card.classList.add('recent-card');
-    
+            
+            card.addEventListener('click', ()=>{
+                window.location.href = 'https://www.google.se'
+            })
             // Create card preview
             const preview = document.createElement('div');
             preview.classList.add('card-preview');
@@ -138,13 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // Append preview and info to card
             card.appendChild(preview);
             card.appendChild(info);
-    
+            
             // Append card to the container
             recentCardsContainer.appendChild(card);
         });
     }
 
-
+    
 
     document.getElementById('darkModeToggle').addEventListener('click', function() {
         document.body.classList.toggle('dark-mode');

@@ -152,25 +152,10 @@ router.get('/tasks/sorted', async (req, res) => {
 });
 
 
-// Route to serve the AddTask page
-router.get('/AddTask', checkLoggedin, (req, res) => {
-    if (!req.session.user) {
-        res.redirect('/login');
-        return;
-    }
-    
-    res.sendFile(path.join(__dirname, '.', 'public', 'AddTask', 'AddTask.html'));
-});
 
-// Route to handle task creation
-router.post('/add-task', async (req, res) => {
-    const taskData = req.body;
 
-    const result = await addTask(taskData, req);
-    res.json(result);
-});
 
-// Route to remove tasks (newly added)
+
 
 
 // Route to handle logout
@@ -184,145 +169,182 @@ router.get('/logout', (req, res) => {
     });
 });
 
-//get categories
-router.get('/categories', async (req, res) => {
-    try {
-        // Check if user is authenticated
-        if (!req.session || !req.session.user) {
-            return res.status(401).json({ 
-                success: false, 
-                message: 'User not logged in' 
-            });
-        }
 
-        const { filter } = req.query; // Get 'filter' from query string
-        const userId = req.session.user.id;
-        
-        // Get categories for the user
-        let categories = await GetCategoriesByUser(userId);
-        
-        // Apply filter if it exists
-        if (filter) {
-            categories = categories.filter(category => 
-                category.name.toLowerCase().includes(filter.toLowerCase())
-            );
-        }
 
-        res.json({ 
-            success: true, 
-            categories 
-        });
-    } catch (err) {
-        console.error('Error fetching categories:', err.message);
-        res.status(500).json({ 
-            success: false, 
-            message: 'Error fetching categories' 
-        });
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/// Middleware to parse JSON request bodies
+router.use(express.json());
+
+// Placeholder data: Users, Workspaces, and Tasks
+const users = [
+    { id: 1, name: 'Alice', email: 'alice@example.com' },
+    { id: 2, name: 'Bob', email: 'bob@example.com' },
+    { id: 3, name: 'Charlie', email: 'charlie@example.com' },
+];
+
+const workspaces = [
+    { id: 1, name: 'Workspace A', tasks: [1], users: [1, 2] },
+    { id: 2, name: 'Workspace B', tasks: [2, 3], users: [3] },
+];
+
+const tasks = [
+    { id: 1, title: 'Task 1', description: 'First task', workspaceId: 1, assignedTo: 1 },
+    { id: 2, title: 'Task 2', description: 'Second task', workspaceId: 2, assignedTo: 3 },
+    { id: 3, title: 'Task 3', description: 'Third task', workspaceId: 2, assignedTo: null },
+];
+
+// Simulate database functions
+const getUsers = () => users;
+const getUserById = (id) => users.find(user => user.id === id);
+const getWorkspaces = () => workspaces;
+const getWorkspaceById = (id) => workspaces.find(workspace => workspace.id === id);
+const getTasksForUser = (userId) => tasks.filter(task => task.assignedTo === userId);
+const getTasksForWorkspace = (workspaceId) => tasks.filter(task => task.workspaceId === workspaceId);
+
+
+
+
+router.get('/users', (req, res) => {
+    const allUsers = getUsers();
+    res.status(200).json(allUsers);
 });
 
-router.get('/category/:categoryId', async (req, res) => {
-    let categoryId, userId; // Declare the variables at the top for global access
-    
-    try {
-        categoryId = req.params.categoryId;  // Get category ID from URL parameter
-        userId = req.session.user.id;  // Get user ID from the request (session, JWT, etc.)
-    } catch {
-        return res.status(500).json({
-            success: false,
-            message: 'User not Logged in'
-        });
-    }
-    
-    try {
-        console.log('Fetching tasks for CategoryID:', categoryId, 'and UserID:', userId);
-        
-        // Fetch tasks based on both categoryId and userId
-        const tasks = await getTasksByCategoryForUser(categoryId, userId);
-        
-        if (!tasks || tasks.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'No tasks found for this category.'
-            });
-        }
 
-        res.json({
-            success: true,
-            tasks: tasks
-        });
-    } catch (err) {
-        console.error('Error fetching tasks for category:', err.message);
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching tasks for category'
-        });
+router.get('/users/:id', (req, res) => {
+    const userId = parseInt(req.params.id, 10);
+    const user = getUserById(userId);
+
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
     }
+
+    const userTasks = getTasksForUser(userId);
+    res.status(200).json({ ...user, tasks: userTasks });
 });
 
 
 
-// router.get('/tasks/:id/categories', async (req, res) => {
-//     const { id } = req.params; // Task ID
-//     const userId = req.session.user.id;
-//     try {
-//         const categories = await GetCategoriesByTask(id, userId);
-//         res.json({ success: true, categories });
-//     } catch (err) {
-//         res.status(500).json({ success: false, message: 'Error fetching categories' });
-//     }
-// });
 
-// POST a new category
-router.post('Tasks/categories', async (req, res) => {
-    try {
-        const { name } = req.body;
-        if (!name) {
-            return res.status(400).json({ success: false, message: 'Category name is required.' });
-        }
-
-        const newCategory = await addCategory(name); // Assume this function adds the category to the database
-        res.json({ success: true, category: newCategory });
-    } catch (err) {
-        console.error('Error adding category:', err.message);
-        res.status(500).json({ success: false, message: 'Error adding category' });
-    }
+router.get('/workspaces', (req, res) => {
+    const allWorkspaces = getWorkspaces();
+    res.status(200).json(allWorkspaces);
 });
 
-// DELETE a category
-router.delete('/categories/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const deleted = await deleteCategory(id); // Assume this function deletes the category from the database
-        if (!deleted) {
-            return res.status(404).json({ success: false, message: 'Category not found.' });
-        }
+router.get('/workspaces/:id', (req, res) => {
+    const workspaceId = parseInt(req.params.id, 10);
+    const workspace = getWorkspaceById(workspaceId);
 
-        res.json({ success: true, message: 'Category deleted successfully' });
-    } catch (err) {
-        console.error('Error deleting category:', err.message);
-        res.status(500).json({ success: false, message: 'Error deleting category' });
+    if (!workspace) {
+        return res.status(404).json({ error: 'Workspace not found' });
     }
+
+    const workspaceTasks = getTasksForWorkspace(workspaceId);
+    res.status(200).json({ ...workspace, tasks: workspaceTasks });
 });
 
 
-router.get('/checkuser', async (req, res) => {    
-    try {
-        // Extract the username from the query parameters
-        const username = req.query.username;
+router.post('/workspaces', (req, res) => {
+    const { name } = req.body;
 
-        if (!username) {
-            return res.status(400).json({ success: false, message: 'Username is required' });
-        }
-
-        // Fetch tasks for the specific user using the username
-        const tasks = await readTasksWithUsername(username); // Assuming readTasksWithUsername is a function that takes a username as an argument
-        
-        res.json(tasks); // Send back the tasks as a JSON response
-    } catch (error) {
-        console.error('Error fetching tasks:', error.message);
-        res.status(500).json({ success: false, message: 'Failed to fetch tasks' });
+    if (!name) {
+        return res.status(400).json({ error: 'Workspace name is required' });
     }
+
+    const newWorkspace = {
+        id: workspaces.length + 1,
+        name,
+        tasks: [],
+        users: [],
+    };
+
+    workspaces.push(newWorkspace);
+    res.status(201).json({ message: 'Workspace created', workspace: newWorkspace });
+});
+
+router.post('/workspaces/:id/assign', (req, res) => {
+    const workspaceId = parseInt(req.params.id, 10);
+    const { userId } = req.body;
+
+    if (!userId) {
+        return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    const workspace = getWorkspaceById(workspaceId);
+    const user = getUserById(userId);
+
+    if (!workspace) {
+        return res.status(404).json({ error: 'Workspace not found' });
+    }
+
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    workspace.users.push(userId);  
+    res.status(200).json({ message: 'User assigned to workspace', workspace });
+});
+
+router.get('/users/:id/tasks', (req, res) => {
+    const userId = parseInt(req.params.id, 10);
+    const tasksForUser = getTasksForUser(userId);
+
+    if (!tasksForUser) {
+        return res.status(404).json({ error: 'No tasks found for this user' });
+    }
+
+    res.status(200).json(tasksForUser);
+});
+
+
+router.get('/workspaces/:id/tasks', (req, res) => {
+    const workspaceId = parseInt(req.params.id, 10);
+    const tasksForWorkspace = getTasksForWorkspace(workspaceId);
+
+    if (!tasksForWorkspace) {
+        return res.status(404).json({ error: 'No tasks found for this workspace' });
+    }
+
+    res.status(200).json(tasksForWorkspace);
+});
+
+
+router.post('/workspaces/:id/tasks', (req, res) => {
+    const workspaceId = parseInt(req.params.id, 10);
+    const { title, description } = req.body;
+
+    if (!title || !description) {
+        return res.status(400).json({ error: 'Title and description are required' });
+    }
+
+    const newTask = {
+        id: tasks.length + 1,
+        title,
+        description,
+        workspaceId,
+        assignedTo: null,
+    };
+
+    tasks.push(newTask);
+    res.status(201).json({ message: 'Task created', task: newTask });
 });
 
 
