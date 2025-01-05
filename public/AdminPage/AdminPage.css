@@ -1,0 +1,424 @@
+/* General reset and basic styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #6b5fd5;
+    color: #333;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+aside {
+    max-width: 33%;
+    background-color: #5c52c7;
+    padding: 20px;
+    color: white;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.logo img {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin-bottom: 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+nav ul li.active a {
+    color: #ffd700;
+}
+
+main {
+    flex-grow: 1;
+    padding: 20px;
+    overflow: hidden;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.search-bar input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    width: 300px;
+}
+
+.new-task-btn {
+    background-color: #ffd700;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dashboard-content {
+    display: flex;    
+    gap: 20px;
+    height: calc(100vh - 140px); /* Adjust this value based on your header height */
+}
+
+.dashboard-content > div {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+
+
+.tasks-section {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-width: 33%;
+    min-width: 25%;
+}
+
+.user-section {
+    grid-column: 3;
+    grid-row: 1;
+    min-height: 100px; /* Adjust this value as needed */
+    overflow-y: auto;
+}
+
+
+
+.completed-tasks-section {
+    grid-column: 3;
+    grid-row: 2 / span 2;
+    overflow-y: auto;
+    max-width: 25%;
+    min-width: 25%;
+}
+
+.task {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: height 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.task:hover {
+    background-color: #f0f0f0;
+}
+
+.task-checkbox {
+    margin-right: 15px;
+}
+
+.task-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-header h3 {
+    margin: 0;
+    flex-grow: 1;
+}
+
+.task-details {
+    padding: 10px;
+    background-color: #f9fafb;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.show-details {
+    max-height: 100px;
+    padding: 10px;
+}
+
+#asap-task-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 10px; /* Add some padding for the scrollbar */
+}
+
+#user-task-list::-webkit-scrollbar, 
+#completed-task-list::-webkit-scrollbar, 
+#user-task-details-section::-webkit-scrollbar, 
+#task-tracking-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+#user-task-list::-webkit-scrollbar-track, 
+#completed-task-list::-webkit-scrollbar-track, 
+#user-task-details-section::-webkit-scrollbar-track, 
+#task-tracking-section::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#user-task-list::-webkit-scrollbar-thumb, 
+#completed-task-list::-webkit-scrollbar-thumb, 
+#user-task-details-section::-webkit-scrollbar-thumb, 
+#task-tracking-section::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+#user-task-list::-webkit-scrollbar-thumb:hover, 
+#completed-task-list::-webkit-scrollbar-thumb:hover, 
+#user-task-details-section::-webkit-scrollbar-thumb:hover, 
+#task-tracking-section::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+
+.scrollable-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+/* Custom checkbox styles */
+.task-checkbox input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #5c52c7;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.task-checkbox input[type="checkbox"]:checked {
+    background-color: #5c52c7;
+    border-color: #5c52c7;
+}
+
+.task-checkbox input[type="checkbox"]:checked::after {
+    content: '\2714';
+    font-size: 14px;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.task-checkbox input[type="checkbox"]:hover {
+    border-color: #ffd700;
+}
+
+.task-checkbox input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(92, 82, 199, 0.3);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.scrollable-list {
+    max-height: 630px;
+    overflow-y: auto;
+    margin-top: 20px;
+}
+
+.new-task-btn {
+    background-color: #ffd700;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.user-section {
+    grid-column: 3;
+    grid-row: 1;
+    min-height: 100px; /* Adjust this value as needed */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure space between categories and button */
+    min-width: 25%;
+    max-width: 25%;
+}
+
+.add-category-btn {
+    background-color: #ffd700;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px; /* Adjust margin as needed */
+    align-self: flex-end; /* Align button to the end (right side) of the section */
+}
+
+.TableAdmin {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+}
+
+.TableAdmin thead {
+    background-color: #f2f2f2;
+}
+
+.TableAdmin th, .TableAdmin td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.Table-info {
+    font-size: 14px;
+    color: #333;
+}
+
+.Body-table {
+    padding: 2px;
+}
+
+.Body-table:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.Body-table:hover {
+    background-color: #e8f5e9;
+    cursor: pointer; 
+}
+
+.Body-table td {
+    transition: background-color 0.3s ease;
+}
+
+.Body-table td:first-child {
+    border-left: 4px solid #4CAF50;
+}
+
+.Body-table td:last-child {
+    text-align: center;
+    font-weight: bold;
+}
+
+
+
+/* Centering content in the "Is Admin" column */
+.TableAdmin th:nth-child(5), .TableAdmin td:nth-child(5) {
+    text-align: center;
+}
+
+.TableAdmin td:nth-child(5):contains('Yes') {
+    color: #4CAF50; /* Green color for "Yes" */
+}
+
+.TableAdmin td:nth-child(5):contains('No') {
+    color: #FF5733; /* Orange-red color for "No" */
+}
+
+
+#UserData {
+    cursor: pointer;
+}
+
+.balls:hover {
+    background-color: black;
+}
+

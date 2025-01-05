@@ -1,0 +1,137 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    min-height: 100vh;
+}
+
+header {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+}
+
+nav a {
+    margin: 0 20px;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #ffd700;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+h1 {
+    color: white;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+p {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.btn-tasks {
+    display: inline-block;
+    padding: 12px 24px;
+    margin: 10px;
+    background-color: #ffd700;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    color: #333;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-tasks:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.task-section {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    margin-top: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+.features-section {
+    margin-top: 40px;
+}
+
+h2 {
+    color: white;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.feature {
+    flex-basis: 17%;
+    margin: 10px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+}
+
+.feature img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    color: white;
+    font-size: 0.9em;
+}
+
+.icon-small {
+    width: 24px;
+    height: 24px;
+}
+
+@media (max-width: 768px) {
+    .features {
+        flex-direction: column;
+    }
+    
+    .feature {
+        flex-basis: 100%;
+        margin: 10px 0;
+    }
+}

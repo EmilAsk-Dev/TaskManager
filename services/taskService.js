@@ -67,8 +67,6 @@ const markTaskAsCompleted = async (taskId) => {
 // Function to unmark a task as completed
 const unmarkTaskAsCompleted = async (taskId) => {
     try {
-        const taskIdString = taskIds.join(','); // Convert array to comma-separated string
-
         const pool = await sql.connect(config);
         await pool.request()
             .input('TaskID', sql.Int, taskId)
@@ -127,10 +125,10 @@ const addCategory = async (categoryName) => {
             .input('CategoryName', sql.VarChar, categoryName)
             .execute('CreateCategory'); 
 
-        return { success: true, message: 'Task marked as completed successfully' };
+        return { success: true, message: 'Category added successfully' };
     } catch (err) {
-        console.error('Error marking task as completed:', err.message);
-        return { success: false, message: 'Error marking task as completed' };
+        console.error('Error adding category:', err.message);
+        return { success: false, message: 'Error adding category' };
     } finally {
         await sql.close();
     }
@@ -177,16 +175,17 @@ const updateCategory = async (categoryId, newCategoryName) => {
 // Delete Category
 const deleteCategory = async (categoryId) => {
     try {
-        // Establish a connection to the database
         const pool = await sql.connect(config);
         await pool.request()
             .input('CategoryID', sql.Int, categoryId)
             .execute('DeleteCategory'); // Call the stored procedure
 
-        return result.recordset; // Return the sorted tasks
-    } catch (error) {
-        console.error("Error fetching sorted tasks:", error);
-        throw new Error("Failed to fetch sorted tasks");
+        return { success: true, message: 'Category deleted successfully' };
+    } catch (err) {
+        console.error('Error deleting category:', err.message);
+        return { success: false, message: 'Error deleting category' };
+    } finally {
+        await sql.close();
     }
 };
 

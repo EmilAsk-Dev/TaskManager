@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="AdminPage.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body>
+    <div class="container">
+        <aside>
+            <div class="logo">
+                <img class="profile" src="/svg/Cey.png" alt="Organizo">
+                <strong id="user"><%= user ? user.username : 'Guest' %></strong>
+            </div>
+            <nav>
+                <ul>                                            
+                        <li><a href="/CreateUser"><strong>Create User</strong></a></li>                                                                    
+                        <li><a href="/logout"><strong>Log out</strong></a></li>                    
+                </ul>
+            </nav>
+        </aside>        
+        <main>
+            <header>
+                <div class="search-bar">
+                    <input type="search" placeholder="Search">
+                </div>
+                <div>
+                    <button id="remove-tasks-btn" class="new-task-btn">Remove Tasks</button>
+                    <button id="addTaskBtn" class="new-task-btn">New task</button>
+                </div>
+            </header>
+            <div class="dashboard-content">
+                <!-- <div class="calendar-section">
+                    <h2>March 2022</h2>
+                     Calendar component goes here 
+                </div> -->
+
+                <div class="tasks-section">
+                    <h2>Users</h2>
+                    <div id="asap-task-list" class="scrollable-list">
+                        <!-- Users will be added here dynamically -->
+                         
+    <table class="TableAdmin">
+        <thead>
+            <tr>
+                <th class="Table-info">ID</th>
+                <th class="Table-info">Username</th>
+                <th class="Table-info">Password</th>
+                <th class="Table-info">Gmail</th>
+                <th class="Table-info">Is Admin</th>
+            </tr>
+        </thead>
+        <tbody >
+            <!--Users Generated here-->            
+        </tbody>
+    </table>
+                    </div>
+                </div>
+
+                <div class="completed-tasks-section">
+                    <h2>Completed tasks</h2>
+                    <div id="completed-task-list" class="scrollable-list">
+                        <!-- Completed tasks will be added here dynamically -->
+                    </div>
+                    
+                </div>
+
+
+                <div class="user-section">
+                    <h2>My categories</h2>
+                    <div class="categories-list" id="categoriesList">
+                        <!-- Categories will be dynamically added here -->
+                    </div>
+                    <button id="add-category-btn" class="new-task-btn">Add Category</button>
+                </div>
+                
+                <!-- <div class="tracking-section">
+                    <h2>My tracking</h2>
+                    <div id="tracking-task-list" class="scrollable-list">
+                         Tasks will be added here dynamically 
+                    </div>
+                </div> -->
+                
+                
+            </div>
+        </main>
+    </div>
+
+    <!-- Include settings modal -->
+    
+
+    <!-- Remove tasks modal -->
+    <div id="removeTasksModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Remove Tasks</h2>
+            <div id="remove-tasks-list" class="scrollable-list">
+                <!-- Tasks to remove will be added here dynamically -->
+            </div>
+            <button id="confirm-remove-btn" class="new-task-btn">Confirm Remove</button>
+        </div>
+    </div>
+    
+    <script src="adminPage.js"></script>
+</body>
+</html>
