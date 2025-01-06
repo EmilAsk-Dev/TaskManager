@@ -11,6 +11,8 @@ router.get('/', async (req, res) => {
 
     res.render('Dashboard', { user: req.session.user });
 
+
+    
     
     return
 

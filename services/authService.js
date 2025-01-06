@@ -12,7 +12,7 @@ async function login(username, password) {
 
         return result.recordset[0]; // Return the first user (or undefined if not found)
     } catch (error) {
-        console.error('Error in getUserByUsername:', error);
+        console.error('Error in Login:', error);
         throw error; // Throw error to be handled by the route or middleware
     }
 }

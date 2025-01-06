@@ -57,8 +57,10 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 });
 
+
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
-    checkDbConnection();  // Check DB connection once when the server starts
+    checkDbConnection(); 
 });

@@ -32,4 +32,17 @@ const authenticate = async (req, res, next) => {
     }
 };
 
-module.exports = authenticate;
+const isAuth = async (req, res, next) => {
+    if(req.session && req.session.user){
+        next()
+    }
+    else{        
+        res.status(401).send({error: 'unauthenticated'})
+    }
+}
+
+
+module.exports = {
+    authenticate,
+    isAuth
+}

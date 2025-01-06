@@ -6,20 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: "Product Roadmap", type: "Board" }
     ];
 
-    const workspaces = [
-        { name: "Main", type: "Work management", icon: "M" },
-        { name: "Design Projects", type: "Design", icon: "D" }
-    ];
+   
 
-    const recentlyVisited = [
-        { name: "Task Board", type: "Main Workspace" },
-        { name: "Dashboard and Reporting", type: "Main Workspace" },
-        { name: "Design System", type: "Design Workspace" },
-        { name: "Task Board", type: "Main Workspace" },
-        { name: "Dashboard and Reporting", type: "Main Workspace" },
-        { name: "Design System", type: "Design Workspace" }
-        
-    ];
+
+
+    
+    
 
     // Populate dynamic content
     function populateFavorites() {
@@ -32,17 +24,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function populateWorkspaces() {
+    async function populateWorkspaces() {
+        
+        const res = await fetch('/api/v1/namespaces')
+        const workspaces = await res.json()
+
         const workspacesList = document.getElementById('workspaces-list');
         workspaces.forEach(workspace => {
             const item = document.createElement('li');
             item.className = 'workspace-item';
             item.innerHTML = `
+            
                 <span class="workspace-icon">${workspace.icon}</span>
                 <div class="workspace-info">
                     <span class="workspace-name">${workspace.name}</span>
                     <span class="workspace-type">${workspace.type}</span>
                 </div>
+            
             `;
             workspacesList.appendChild(item);
         });
@@ -106,10 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const recentCardsContainer = document.getElementById('recentCardsContainer');
     
     // Function to display the recently visited items
-    function displayRecentlyVisited() {
+    async function displayRecentlyVisited() {
         // Clear the container
         recentCardsContainer.innerHTML = "";
-    
+        
+        const res = await fetch('/api/v1/namespaces/recent')
+        const recentlyVisited = await res.json()
+
         // Generate cards from the array
         recentlyVisited.forEach(item => {
             // Create card container
@@ -118,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.add('recent-card');
             
             card.addEventListener('click', ()=>{
-                window.location.href = 'https://www.google.se'
+                window.location.href = `/namespace/${item.id}`
             })
             // Create card preview
             const preview = document.createElement('div');
@@ -159,9 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Initialize everything
-    populateFavorites();
-    populateWorkspaces();
-    initializeDropdowns();
-    initializeClickHandlers();
-    displayRecentlyVisited();
+    (async ()=>{
+        populateFavorites();
+        await populateWorkspaces();
+        initializeDropdowns();
+        initializeClickHandlers();
+        displayRecentlyVisited();
+    })()
+    
 });

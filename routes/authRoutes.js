@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const authenticate = require('../services/authMiddleware');
+const {authenticate} = require('../services/authMiddleware');
 
 
 router.get('/login', (req, res) => {
