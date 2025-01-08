@@ -1,102 +1,209 @@
-/* Basic Reset */
+/* Global Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Apply background color */
 body {
-    font-family: Arial, sans-serif;
-    background-color: var(--primary-bg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    color: #333;
+    line-height: 1.6;
 }
 
-/* Variables for the colors */
-:root {
-    --primary-bg: #1f243c;
-    --sidebar-bg: #292f4c;
-    --card-bg: #32374f;
-    --hover-bg: #383e5c;
-    --primary-blue: #0073ea;
-    --text-primary: #ffffff;
-    --text-secondary: #676879;
-    --success-green: #00c875;
-    --header-bg: #32374f;
-}
-
-/* Login Container */
-.login-container {
+.wrapper {
     display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
 }
 
-/* Login Card */
-.login-card {
-    background-color: var(--card-bg);
-    padding: 30px;
-    border-radius: 8px;
-    width: 300px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* Sidebar Styles */
+.sidebar {
+    width: 250px;
+    background-color: #f7f7f7;
+    border-right: 1px solid #e1e1e1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
 }
 
-.login-card h2 {
-    text-align: center;
-    color: var(--text-primary);
-    margin-bottom: 20px;
+.workspace-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    font-weight: 500;
 }
 
-/* Input fields */
-.input-group {
-    margin-bottom: 15px;
+.sidebar-nav {
+    flex-grow: 1;
 }
 
-.input-group label {
-    color: var(--text-secondary);
-    display: block;
-    margin-bottom: 5px;
+.sidebar-nav ul {
+    list-style: none;
+    margin-top: 16px;
 }
 
-.input-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--hover-bg);
+.sidebar-nav li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    cursor: pointer;
     border-radius: 4px;
-    background-color: var(--sidebar-bg);
-    color: var(--text-primary);
-    font-size: 16px;
 }
 
-.input-group input:focus {
-    outline: none;
-    border-color: var(--primary-blue);
+.sidebar-nav li.active {
+    background-color: #e9e9e9;
 }
 
-/* Button */
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: var(--primary-blue);
-    color: var(--text-primary);
-    font-size: 16px;
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 8px 8px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.add-btn {
+    background: none;
     border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #666;
+}
+
+.sidebar-footer {
+    display: flex;
+    gap: 8px;
+    padding-top: 16px;
+}
+
+.sidebar-footer button {
+    padding: 8px 16px;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+}
+
+/* Main Content Styles */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.view-controls, .action-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.view-btn {
+    padding: 6px 12px;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+}
+
+.view-btn.active {
+    background-color: #e9e9e9;
+}
+
+.add-task-btn {
+    background-color: #0073ea;
+    color: white;
+    border: none;
+    padding: 8px 16px;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: var(--hover-bg);
+/* View Container Styles */
+.view-container {
+    flex-grow: 1;
+    padding: 16px;
+    overflow: auto;
 }
 
-/* Hover effects for inputs and button */
-input:hover,
-button:hover {
-    background-color: var(--hover-bg);
+.view {
+    display: none;
+}
+
+.view.active {
+    display: block;
+}
+
+/* Board View Styles */
+.board-view {
+    display: flex;
+    gap: 16px;
+}
+
+.board-column {
+    min-width: 280px;
+    background-color: #f7f7f7;
+    border-radius: 4px;
+    padding: 16px;
+}
+
+.board-column h3 {
+    margin-bottom: 16px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.task-card {
+    background: white;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    border: 1px solid #e1e1e1;
+    cursor: pointer;
+}
+
+/* List View Styles */
+.list-view .list-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    padding: 8px 16px;
+    background-color: #f7f7f7;
+    font-weight: 500;
+}
+
+/* Calendar View Styles */
+.calendar-view {
+    background: white;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+}
+
+/* Gantt View Styles */
+.gantt-view {
+    overflow: auto;
+}
+
+/* Table View Styles */
+.table-view table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-view th,
+.table-view td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.table-view thead {
+    background-color: #f7f7f7;
 }

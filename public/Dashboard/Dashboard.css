@@ -249,8 +249,7 @@ body.dark-mode .dark-mode-toggle .toggle-circle {
 .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    background-color: var(--header-bg);
+    align-items: center;    
     border-radius: 3px;
     height: 60px;
 }

@@ -3,6 +3,8 @@ const config = require('./dbConfig'); // Your DB configuration file
 
 // Function to get a user by username
 async function login(username, password) {
+    
+    
     try {
         const pool = await sql.connect(config); // DB connection
         const result = await pool.request()

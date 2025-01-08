@@ -62,5 +62,5 @@ app.use((err, req, res, next) => {
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
-    checkDbConnection(); 
+    checkDbConnection();
 });

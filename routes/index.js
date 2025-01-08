@@ -19,8 +19,8 @@ router.use('/dashboard', dashboardRoutes); // Dashboard-related routes
 router.use('/workspace', workspaceRoutes);// Workspace-related routes
 router.use('/namespace', namespacesRoutes); 
 
-router.use('/api/v1/tasks', isAuth, tasksApi)
-router.use('/api/v1/namespaces', isAuth, namespacesApi)
+router.use('/api/v1/tasks', /*isAuth*/ tasksApi)
+router.use('/api/v1/namespaces', /*isAuth*/ namespacesApi)
 
 
 

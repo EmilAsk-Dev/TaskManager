@@ -7,7 +7,7 @@ const authenticate = async (req, res, next) => {
         if (!username || !password) {
             return res.status(400).json({ error: 'Username and password are required' });
         }
-
+        
         // Fetch user from the database (service layer)
         const user = await authService.login(username, password);
         
@@ -21,6 +21,7 @@ const authenticate = async (req, res, next) => {
                 Role: user.RoleID,
                 roleName: user.RoleName
             };
+
             console.log('Authenticated user:', req.session.user);
             return next(); // Proceed to the next middleware (or route handler)
         } else {

@@ -10,7 +10,7 @@ router.get('/' , async (req , res) => {
 
 router.get('/recent', async (req , res) =>{
     res.json([
-        {id:"1", name: "Task Board", type: "Main Workspace"},
+        {id:"1", name: "Task Board", type: "Main Workspace",},
         {id:"2", name: "Dashboard and Reporting", type: "Main Workspace" },
         {id:"3", name: "Design System", type: "Design Workspace" },
         {id:"4", name: "Task Board", type: "Main Workspace" },
