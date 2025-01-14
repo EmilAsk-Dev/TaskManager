@@ -229,6 +229,6 @@ initializeApp();
     await populateWorkspaces();
     initializeDropdowns();
     initializeClickHandlers();
-    displayRecentlyVisited();
+    //displayRecentlyVisited();
     
 })()
