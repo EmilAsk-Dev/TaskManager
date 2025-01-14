@@ -103,12 +103,14 @@ body.dark-mode .dark-mode-toggle .toggle-circle {
 .sidebar-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     margin-bottom: 24px;
+    
 }
 
 .logo {
     height: 30px;
+    border-radius: 20px;
 }
 
 .see-plans {

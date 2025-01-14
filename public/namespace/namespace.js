@@ -124,6 +124,10 @@ function createTabSection(tabName, container) {
     tab.innerHTML = `
         <span class="tab-icon">▼</span>
         <span>${tabName}</span>
+        <div>
+
+        </div>
+        
     `;
 
     // Create content container
@@ -134,13 +138,13 @@ function createTabSection(tabName, container) {
     const headers = document.createElement('div');
     headers.className = 'column-headers';
     headers.innerHTML = `
-        <div></div>
-        <div>Task Name</div>
-        <div>Owner</div>
-        <div>Status</div>
-        <div>Date</div>
-        <div>Priority</div>
-        <div>Time Est.</div>
+        <div class="DoneHeader">Done</div>
+        <div class="taskname">Task Name</div>
+        <div class="owneruser">Owner</div>
+        <div class="statustask">Status</div>
+        <div class="datetask">Date</div>
+        <div class="prioritytask">Priority</div>
+        <div class="createdat">Time Est.</div>
     `;
     content.appendChild(headers);
 
@@ -184,19 +188,19 @@ function createTabSection(tabName, container) {
     container.appendChild(section);
 }
 
-// Create task element (keeping the same implementation)
+// Create task element
 function createTaskElement(task, index) {
     const taskElement = document.createElement('div');
     taskElement.className = 'task-item';
     taskElement.style.animationDelay = `${index * 0.1}s`;
     taskElement.innerHTML = `
         <div class="checkbox"></div>
-        <div>${task.name}</div>
-        <div>👤</div>
+        <div class="taskname">${task.name}</div>
+        <div class="owneruser">👤</div>
         <div class="status ${task.status.toLowerCase().replace(/\s/g, '')}">${task.status || ''}</div>
-        <div>${task.date}</div>
+        <div class="datetask">${task.date}</div>
         <div class="priority ${task.priority.toLowerCase()}">${task.priority}</div>
-        <div>${task.timeEst}</div>
+        <div class="time-est">${task.timeEst}</div>
     `;
     return taskElement;
 }

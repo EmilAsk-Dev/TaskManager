@@ -8,7 +8,7 @@
     --text-secondary: #676879;
     --success-green: #00c875;
     --header-bg: #f0f0f0;
-    --sidebar-width: 250px;
+    --sidebar-width: 10%;
 }
 
 /* Dark Mode Variables */
@@ -311,7 +311,7 @@ html, body {
 }
 
 .task-list {
-    padding: 0 20px;
+    padding: 0;   
 }
 
 .main-table {
@@ -348,6 +348,16 @@ html, body {
     opacity: 0;
     animation-fill-mode: forwards;
     color: var(--text-primary);
+}
+
+
+.column-headers,
+.task-item {
+    display: grid;
+    grid-template-columns: 30px 1fr 100px 150px 120px 120px 100px;
+    gap: 8px;
+    padding: 15px 20px;
+    align-items: center;
 }
 
 @keyframes slideIn {
@@ -451,4 +461,41 @@ html, body {
 
 .checkbox:hover {
     border-color: #0095ff;
+}
+
+
+.taskname{
+    text-align: center;
+}
+
+.owneruser{
+    text-align: center;
+}
+
+.statustask{
+    text-align: center;
+}
+
+.datetask{
+    text-align: center;
+}
+
+.prioritytask{
+    text-align: center;
+}
+
+.createdat{
+    text-align: center;
+}
+
+.time-est{
+    text-align: center;
+}
+
+.DoneTask{
+    justify-self: center;
+}
+
+.DoneHeader{
+    text-align: center;
 }
