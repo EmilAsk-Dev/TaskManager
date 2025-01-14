@@ -2,141 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Management Interface</title>
-    <link rel="stylesheet" href="namespace.css">
+    <title>Team Tasks</title>
+    <link rel="stylesheet" href="namespace.css"> 
 </head>
-<body>
-    <div class="wrapper">
-        <!-- Sidebar -->
+<body class="dark-mode">
+    <div class="app-container">
         <aside class="sidebar">
-            <div class="workspace-header">
-                <img src="workspace-icon.png" alt="" class="workspace-icon">
-                <span>Emil's Workspace</span>
+            <div class="sidebar-header">
+                <img src="/svg/Logo.png" alt="Logo" class="logo">
             </div>
             
             <nav class="sidebar-nav">
-                <ul>
-                    <li class="active"><img src="home-icon.png" alt="">Home</li>
-                    <li><img src="inbox-icon.png" alt="">Inbox</li>
-                    <li class="more-menu"><img src="more-icon.png" alt="">More</li>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <div class="nav-header">
+                            <span class="icon">🏠</span>
+                            <span class="nav-title">Home</span>
+                            <span class="nav-arrow">▼</span>
+                        </div>
+                        <ul class="nav-dropdown">
+                            <li class="dropdown-item">Dashboard</li>
+                            <li class="dropdown-item">Overview</li>
+                            <li class="dropdown-item">My Tasks</li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <div class="nav-header">
+                            <span class="icon">📝</span>
+                            <span class="nav-title">My Work</span>
+                            <span class="nav-arrow">▼</span>
+                        </div>
+                        <ul class="nav-dropdown">
+                            <li class="dropdown-item">All Tasks</li>
+                            <li class="dropdown-item">Completed</li>
+                            <li class="dropdown-item">In Progress</li>
+                        </ul>
+                    </li>
+        
+                    <li class="nav-item">
+                        <div class="nav-header">
+                            <span class="icon">⭐</span>
+                            <span class="nav-title">Favorites</span>
+                            <span class="nav-arrow">▼</span>
+                        </div>
+                        <ul class="nav-dropdown" id="favorites-list">
+                            <!-- Populated dynamically -->
+                        </ul>
+                    </li>
+        
+                    <li class="nav-item">
+                        <div class="nav-header">
+                            <span class="icon">📁</span>
+                            <span class="nav-title">Workspaces</span>
+                            <span class="nav-arrow">▼</span>
+                        </div>
+                        <ul class="nav-dropdown" id="workspaces-list">
+                            <!-- Populated dynamically -->
+                        </ul>
+                    </li>
                 </ul>
-                
-                <div class="section-header">
-                    <span>Favorites</span>
-                </div>
-                
-                <div class="section-header spaces">
-                    <span>Spaces</span>
-                    <button class="add-btn">+</button>
-                </div>
-                
-                <div class="team-space">
-                    <img src="team-icon.png" alt="">
-                    <span>Team Space</span>
-                </div>
-                
-                <div class="projects">
-                    <div class="project-header">Projects</div>
-                    <ul>
-                        <li class="active">Project 1</li>
-                        <li>Project 2</li>
-                        <li>Project Notes</li>
-                    </ul>
-                </div>
             </nav>
-            
-            <div class="sidebar-footer">
-                <button class="invite-btn">Invite</button>
-                <button class="help-btn">Help</button>
-            </div>
         </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Top Navigation -->
-            <nav class="top-nav">
-                <div class="view-controls">
-                    <button class="view-btn active" data-view="board">Board</button>
-                    <button class="view-btn" data-view="list">List</button>
-                    <button class="view-btn" data-view="calendar">Calendar</button>
-                    <button class="view-btn" data-view="gantt">Gantt</button>
-                    <button class="view-btn" data-view="table">Table</button>
-                </div>
-                
-                <div class="action-controls">
-                    <button class="search-btn">Search</button>
-                    <button class="hide-btn">Hide</button>
-                    <button class="customize-btn">Customize</button>
-                    <button class="add-task-btn">Add Task</button>
-                </div>
-            </nav>
-
-            <!-- View Container -->
-            <div class="view-container">
-                <!-- Board View (default) -->
-                <div class="view board-view active">
-                    <div class="board-column">
-                        <h3>TO DO</h3>
-                        <div class="task-list">
-                            <div class="task-card">Task 1</div>
-                            <div class="task-card">Task 2</div>
-                            <div class="task-card">Task 3</div>
-                        </div>
-                        <button class="add-task">+ Add Task</button>
-                    </div>
-                </div>
-
-                <!-- List View -->
-                <div class="view list-view">
-                    <div class="list-header">
-                        <span>Name</span>
-                        <span>Status</span>
-                        <span>Due Date</span>
-                    </div>
-                    <div class="list-items">
-                        <!-- Tasks will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Calendar View -->
-                <div class="view calendar-view">
-                    <div class="calendar-header">
-                        <!-- Calendar navigation will be added by JavaScript -->
-                    </div>
-                    <div class="calendar-grid">
-                        <!-- Calendar cells will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Gantt View -->
-                <div class="view gantt-view">
-                    <div class="gantt-header">
-                        <!-- Timeline headers will be added by JavaScript -->
-                    </div>
-                    <div class="gantt-grid">
-                        <!-- Gantt chart will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Table View -->
-                <div class="view table-view">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Status</th>
-                                <th>Due Date</th>
-                                <th>Assignee</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Table rows will be populated by JavaScript -->
-                        </tbody>
-                    </table>
+        <div class="container">
+            <!-- Header and toolbar remain the same -->
+            <div class="header">
+                <h1>Team Tasks</h1>
+                <div class="header-actions">
+                    <button class="header-button">0</button>
+                    <button class="header-button">0</button>
+                    <button class="header-button">1/1</button>
                 </div>
             </div>
-        </main>
+
+            <div class="toolbar">
+                <div class="left-actions">
+                    <div class="section-header">
+                        <span>Main Table</span>
+                        <span>▼</span>
+                    </div>
+                    <button class="new-item-btn">New Item ▾</button>
+                </div>
+                <div class="right-actions">
+                    <input type="text" class="search-box" placeholder="Search / Filter Board">
+                </div>
+            </div>
+
+            <div id="tabs-container"></div>
+        </div>
     </div>
     <script src="namespace.js"></script>
 </body>
