@@ -1,16 +1,3 @@
-// Sample data structure
-const taskData = {
-    'This Week': [
-        { id: 1, name: 'Task 1', status: 'Working on it', date: 'Mar 8', priority: 'High', timeEst: '2h' },
-        { id: 2, name: 'Task 2', status: 'Working on it', date: 'Mar 14', priority: 'High', timeEst: '5h' },
-        { id: 3, name: 'Task 3', status: 'Waiting for review', date: 'Mar 21', priority: 'Medium', timeEst: '2.5h' },
-        { id: 4, name: 'Task 4', status: '', date: 'Mar 29', priority: 'Medium', timeEst: '7h' }
-    ],
-    'Next Week': [
-        { id: 5, name: 'Task 5', status: '', date: '', priority: 'High', timeEst: '2h' }
-    ]
-};
-
 const favorites = [
     { name: "Marketing Campaign", type: "Board" },
     { name: "Design System", type: "Board" },
@@ -28,6 +15,7 @@ function populateFavorites() {
         favoritesList.appendChild(item);
     });
 }
+
 
 async function populateWorkspaces() {
     
@@ -108,13 +96,58 @@ function initializeClickHandlers() {
 // Initialize the app
 async function initializeApp() {
     const tabsContainer = document.getElementById('tabs-container');
-    Object.keys(taskData).forEach((tabName, index) => {
-        createTabSection(tabName, tabsContainer);
-    });
+
+    // Clear the container before initializing
+    tabsContainer.innerHTML = '';
+
+    try {
+        // Fetch task data (mock or API call)
+        const response = await fetch('/Api/v1/tasks');
+        if (!response.ok) {
+            throw new Error('Failed to fetch task data');
+        }
+        const taskData = await response.json();
+
+        // Create tab sections for each key in taskData
+        await Promise.all(
+            Object.keys(taskData).map(async (tabName) => {
+                await createTabSection(tabName, tabsContainer, taskData[tabName]);
+            })
+        );
+    } catch (error) {
+        console.error('Error initializing app:', error);
+        tabsContainer.innerHTML = '<p class="error">Failed to load tasks. Please try again later.</p>';
+    }
 }
 
-// Create tab section
-function createTabSection(tabName, container) {
+async function GetTasks(index = 0) {
+    try {
+        const response = await fetch('/Api/v1/tasks');
+        if (!response.ok) throw new Error('Failed to fetch tasks');
+        const tasks = await response.json();
+        console.log(tasks); // Debug fetched tasks
+        const taskElement = document.createElement('div');
+        taskElement.className = 'task-item';
+        taskElement.style.animationDelay = `${index * 0.1}s`;
+        taskElement.innerHTML = `
+            <div class="checkbox"></div>
+            <div class="taskname">${tasks.name || 'Unnamed Task'}</div>
+            <div class="owneruser">👤</div>
+            <div class="status ${tasks.status ? tasks.status.toLowerCase().replace(/\s/g, '') : ''}">${tasks.status || 'Unknown'}</div>
+            <div class="datetask">${tasks.date || 'No Date'}</div>
+            <div class="priority ${tasks.priority ? tasks.priority.toLowerCase() : 'medium'}">${tasks.priority || 'Medium'}</div>
+            <div class="time-est">${tasks.timeEst || '0h'}</div>
+        `;
+        return taskElement;
+    } catch (error) {
+        console.error('Error fetching tasks:', error);
+        return null;
+    }
+}
+
+
+// Create a tab section dynamically
+async function createTabSection(tabName, container) {
     const section = document.createElement('div');
     section.className = 'tab-section';
 
@@ -124,10 +157,6 @@ function createTabSection(tabName, container) {
     tab.innerHTML = `
         <span class="tab-icon">▼</span>
         <span>${tabName}</span>
-        <div>
-
-        </div>
-        
     `;
 
     // Create content container
@@ -148,16 +177,26 @@ function createTabSection(tabName, container) {
     `;
     content.appendChild(headers);
 
-    // Add task list
+    // Fetch tasks and add them to the list
     const taskList = document.createElement('div');
     taskList.className = 'task-list';
-    
-    taskData[tabName].forEach((task, index) => {
+    let tasks = [];
+
+    try {
+        const response = await fetch('/Api/v1/tasks');
+        if (!response.ok) throw new Error(`Failed to fetch tasks for ${tabName}`);
+        const data = await response.json();
+        tasks = data[tabName] || [];
+    } catch (error) {
+        console.error(`Error fetching tasks for ${tabName}:`, error);
+    }
+
+    tasks.forEach((task, index) => {
         const taskElement = createTaskElement(task, index);
-        taskList.appendChild(taskElement);
+        if (taskElement) taskList.appendChild(taskElement);
     });
 
-    // Add the "+ Add" button
+    // Add "+ Add" button
     const addTask = document.createElement('div');
     addTask.className = 'task-item add-task';
     addTask.innerHTML = '+ Add';
@@ -167,8 +206,9 @@ function createTabSection(tabName, container) {
     // Add summary
     const summary = document.createElement('div');
     summary.className = 'summary';
-    const totalTime = taskData[tabName].reduce((sum, task) => {
-        return sum + parseFloat(task.timeEst);
+    const totalTime = tasks.reduce((sum, task) => {
+        const time = parseFloat(task.timeEst?.replace('h', '') || '0');
+        return sum + time;
     }, 0);
     summary.textContent = `${totalTime}h sum`;
 
@@ -188,24 +228,48 @@ function createTabSection(tabName, container) {
     container.appendChild(section);
 }
 
+
+
+
+
 // Create task element
-function createTaskElement(task, index) {
+// Helper function to create a task element
+function createTaskElement(task = {}, index = 0) {
     const taskElement = document.createElement('div');
     taskElement.className = 'task-item';
     taskElement.style.animationDelay = `${index * 0.1}s`;
     taskElement.innerHTML = `
         <div class="checkbox"></div>
-        <div class="taskname">${task.name}</div>
+        <div class="taskname">${task.name || 'Unnamed Task'}</div>
         <div class="owneruser">👤</div>
-        <div class="status ${task.status.toLowerCase().replace(/\s/g, '')}">${task.status || ''}</div>
-        <div class="datetask">${task.date}</div>
-        <div class="priority ${task.priority.toLowerCase()}">${task.priority}</div>
-        <div class="time-est">${task.timeEst}</div>
+        <div class="status ${task.status?.toLowerCase()?.replace(/\s/g, '') || ''}">${task.status || 'Unknown'}</div>
+        <div class="datetask">${task.date || 'No Date'}</div>
+        <div class="priority ${task.priority?.toLowerCase() || 'medium'}">${task.priority || 'Medium'}</div>
+        <div class="time-est">${task.timeEst || '0h'}</div>
     `;
     return taskElement;
 }
 
-// Add new task (keeping the same implementation)
+// Add new task dynamically
+function addNewTask(tabName) {
+    const newTask = {
+        id: Date.now(),
+        name: `Task ${taskData[tabName]?.length + 1 || 1}`,
+        status: '',
+        date: '',
+        priority: 'Medium',
+        timeEst: '0h'
+    };
+    if (!taskData[tabName]) taskData[tabName] = [];
+    taskData[tabName].push(newTask);
+
+    // Refresh tabs
+    const container = document.getElementById('tabs-container');
+    container.innerHTML = '';
+    Object.keys(taskData).forEach((name) => createTabSection(name, container));
+}
+
+// Add new task
 function addNewTask(tabName) {
     const newTask = {
         id: Math.max(...Object.values(taskData).flat().map(t => t.id)) + 1,
@@ -233,6 +297,8 @@ initializeApp();
     await populateWorkspaces();
     initializeDropdowns();
     initializeClickHandlers();
+    await GetTasks()
     //displayRecentlyVisited();
     
 })()
+
