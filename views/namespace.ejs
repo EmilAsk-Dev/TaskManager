@@ -77,9 +77,7 @@
 
             <div class="toolbar">
                 <div class="left-actions">
-                    <div class="section-header">
-                        <!--Make buttons-->
-                    </div>
+                    <div class="section-header"></div>
                     <button class="new-item-btn">New Item ▾</button>
                 </div>
                 <div class="right-actions">
@@ -90,6 +88,57 @@
             <div id="tabs-container"></div>
         </div>
     </div>
+
+    <!-- Modal HTML -->
+<div id="modalBackdrop" class="hidden"></div>
+<div id="taskModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Add New Task</h2>
+    <form id="taskForm">
+      <div class="form-group">
+        <label for="taskName">Task Name</label>
+        <input type="text" id="taskName" placeholder="Enter task name" required />
+      </div>
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" id="date" required />
+      </div>
+      <div class="form-group">
+        <label for="priority">Priority</label>
+        <select id="priority" required>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="timeEst">Time Est. (hours)</label>
+        <input type="number" id="timeEst" placeholder="e.g., 2" required />
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="saveTaskBtn">Save</button>
+        <button type="button" id="cancelTaskBtn">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- Task Options Modal -->
+<div id="taskOptionsModal" class="task-modal task-modal-hidden">
+    <div class="task-modal-content">
+        <span class="task-modal-close-btn">&times;</span>
+        <h2>Select Task Type</h2>
+        <div class="task-option-buttons-container">
+            <button class="task-option-btn" data-task-type="basic">Basic Task</button>
+            <button class="task-option-btn" data-task-type="checklist">Checklist</button>
+            <button class="task-option-btn" data-task-type="deadline">Deadline</button>
+            <button class="task-option-btn" data-task-type="recurring">Recurring</button>
+        </div>
+    </div>
+</div>
+      
+
     <script src="namespace.js"></script>
 </body>
 </html>
