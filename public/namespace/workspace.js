@@ -126,6 +126,7 @@ async function initializeApp() {
         //         await createTabSection(tabName, tabsContainer, taskData[tabName]);
         //     })
         // );
+        
     } catch (error) {
         console.error('Error initializing app:', error);
         tabsContainer.innerHTML = '<p class="error">Failed to load tasks. Please try again later.</p>';
@@ -133,10 +134,14 @@ async function initializeApp() {
 }
 
 async function AddTaskToTab() {
+
     const taskName = document.getElementById('taskName').value.trim();
     const date = document.getElementById('date').value.trim();
     const priority = document.getElementById('priority').value.trim();
     const timeEst = document.getElementById('timeEst').value.trim();
+
+    
+
 
     if (!taskName || !date || !priority || !timeEst) {
         alert('Please fill all fields!');
@@ -154,7 +159,6 @@ async function AddTaskToTab() {
     } 
         
     const Task = {
-        week: week,
         name: taskName,
         status: 'Pending',
         date,
@@ -163,14 +167,26 @@ async function AddTaskToTab() {
     };
 
     const tabsContainer = document.getElementById('tabs-container');
+    console.log(tabsContainer)
+    
     let container = tabsContainer.querySelector(`.tab-section-${week}`);
     if (!container) {
+        console.log("No container found, creating new one...");
         container = createTabSection(`week ${week}`, tabsContainer, [], week);
+        console.log(container); // Ensure it returns a new element
     }
+    
+    console.log(container)
 
     const taskList = container.querySelector('.task-list');
-    const taskElement = await GetTasks(taskList.children.length, Task);  // Pass the new task data
+    console.log(taskList)
+    
+
+    
+    
+    const taskElement = await GetTasks(taskList.children.length, Task);
     taskList.insertBefore(taskElement, taskList.lastElementChild);
+
 
     // Refresh summary if needed
     const summary = taskList.querySelector('.summary');
@@ -230,7 +246,9 @@ function getWeek(date = new Date()) {
 function createTabSection(tabName, container, tasks = [], week) {
     const section = document.createElement('div');
     section.className = `tab-section tab-section-${week}`;
-    
+    console.log(tasks)
+
+
     // Create tab header
     const tab = document.createElement('div');
     tab.className = 'tab';
@@ -290,7 +308,7 @@ function createTabSection(tabName, container, tasks = [], week) {
     section.appendChild(content);
     container.appendChild(section);
 
-    return container;
+    return section;
 }
 
 function createTaskElement(task = {}, index = 0) {
@@ -298,16 +316,46 @@ function createTaskElement(task = {}, index = 0) {
     taskElement.className = 'task-item';
     taskElement.style.animationDelay = `${index * 0.1}s`;
     taskElement.innerHTML = `
-        <div class="checkbox"></div>
-        <div class="taskname">${task.name || 'Unnamed Task'}</div>
-        <div class="owneruser">👤</div>
-        <div class="status ${task.status?.toLowerCase()?.replace(/\s/g, '') || ''}">${task.status || 'Unknown'}</div>
-        <div class="datetask">${task.date || 'No Date'}</div>
-        <div class="priority ${task.priority?.toLowerCase() || 'medium'}">${task.priority || 'Medium'}</div>
-        <div class="time-est">${task.timeEst || '0h'}</div>
+        <div class="task-checkbox"></div>
+        <div class="task-name">${task.name || 'Unnamed Task'}</div>
+        <div class="task-owner">👤</div>
+        <div class="task-status ${task.status?.toLowerCase()?.replace(/\s/g, '') || ''}">${task.status || 'Unknown'}</div>
+        <div class="task-date">${task.date || 'No Date'}</div>
+        <div class="task-priority ${task.priority?.toLowerCase() || 'medium'}">${task.priority || 'Medium'}</div>
+        <div class="task-time">${task.timeEst || '0h'}</div>
     `;
+
+    taskElement.addEventListener('click', () => {
+        showTaskModal(task);
+    });
+
     return taskElement;
 }
+
+function showTaskModal(task) {
+    const modal = document.getElementById('task-modal');
+    modal.classList.add('active');
+
+    document.getElementById('task-modal-name').textContent = task.name || 'Unnamed Task';
+    document.getElementById('task-modal-status').textContent = task.status || 'Unknown';
+    document.getElementById('task-modal-owner').textContent = '👤';
+    document.getElementById('task-modal-date').textContent = task.date || 'No Date';
+    document.getElementById('task-modal-priority').textContent = task.priority || 'Medium';
+    document.getElementById('task-modal-time').textContent = task.timeEst || '0h';
+}
+
+// Close Modal
+document.getElementById('close-task-modal').addEventListener('click', () => {
+    const modal = document.getElementById('task-modal');
+    modal.classList.remove('active');
+});
+
+// Close modal on clicking outside the content
+document.getElementById('task-modal').addEventListener('click', (event) => {
+    if (event.target === document.getElementById('task-modal')) {
+        document.getElementById('task-modal').classList.remove('active');
+    }
+});
 
 function updateSummary(taskList) {
     const summary = taskList.querySelector('.summary');
@@ -322,6 +370,8 @@ function updateSummary(taskList) {
         summary.textContent = `${totalTime}h sum`;
     }
 }
+
+
 
 const modal = document.getElementById('taskModal');
 const modalBackdrop = document.getElementById('modalBackdrop');

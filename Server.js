@@ -23,7 +23,7 @@ app.set('view engine', 'ejs');
 
 // Session middleware configuration
 app.use(session({
-    secret: 'your_secret_key',  // Replace with a strong secret in production
+    secret: 'your_secret_key',  
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -48,7 +48,7 @@ async function checkDbConnection() {
     }
 }
 
-// Use the routes defined in routes/index.js
+
 app.use('/', routes);
 
 // Error Handling

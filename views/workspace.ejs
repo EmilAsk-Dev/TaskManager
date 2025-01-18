@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Team Tasks</title>
-    <link rel="stylesheet" href="namespace.css">
+    <link rel="stylesheet" href="workspace.css">
 </head>
 <body class="dark-mode">
     <div class="app-container">
@@ -84,8 +84,12 @@
                     <input type="text" class="search-box" placeholder="Search / Filter Board">
                 </div>
             </div>
-
-            <div id="tabs-container"></div>
+            <div class="main-element-container">
+                <div class="statistics-Tasks">
+                    Somestuff <!--Implement somehting with statistics -->
+                </div>
+                <div id="tabs-container"></div>
+            </div>
         </div>
     </div>
 
@@ -137,8 +141,20 @@
         </div>
     </div>
 </div>
+
+<div id="task-modal" class="task-modal-overlay">
+    <div class="task-modal-box">
+        <span id="close-task-modal" class="task-modal-close-btn">&times;</span>
+        <h2 id="task-modal-name" class="task-modal-title">Task Name</h2>
+        <p class="task-modal-detail"><strong>Status:</strong> <span id="task-modal-status">Unknown</span></p>
+        <p class="task-modal-detail"><strong>Owner:</strong> <span id="task-modal-owner">👤</span></p>
+        <p class="task-modal-detail"><strong>Date:</strong> <span id="task-modal-date">No Date</span></p>
+        <p class="task-modal-detail"><strong>Priority:</strong> <span id="task-modal-priority">Medium</span></p>
+        <p class="task-modal-detail"><strong>Estimated Time:</strong> <span id="task-modal-time">0h</span></p>
+    </div>
+</div>
       
 
-    <script src="namespace.js"></script>
+    <script src="workspace.js"></script>
 </body>
 </html>

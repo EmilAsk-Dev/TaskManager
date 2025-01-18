@@ -10,7 +10,7 @@ router.get('/:id', async (req, res) => {
         return res.redirect('/auth/login');
     }
     
-    res.render('namespace', { user: req.session.user });   
+    res.render('workspace', { user: req.session.user });   
     return
 })
 

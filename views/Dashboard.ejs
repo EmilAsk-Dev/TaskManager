@@ -17,7 +17,11 @@
             
             <nav class="sidebar-nav">
                 <ul class="nav-list">
-                    <li class="nav-item">
+                    <div class="add-workspace-button">
+                        <BUTTon class="button">Create workspace</BUTTon>
+                    </div>
+                    
+                    <li class="nav-item">                        
                         <div class="nav-header">
                             <span class="icon">🏠</span>
                             <span class="nav-title">Home</span>
@@ -126,27 +130,16 @@
             
         </main>
         <aside class="profile-sidebar">
-            <div class="profile-completion">
-                <h2>Complete Your Profile</h2>
-                <ul class="completion-tasks">
-                    <li class="task-item completed">
-                        <span class="check-icon">✓</span>
-                        Setup Account
-                    </li>
-                    <li class="task-item">
-                        Upload Your Photo
-                    </li>
-                    <li class="task-item completed">
-                        <span class="check-icon">✓</span>
-                        Invite Team Members
-                    </li>
-                    <li class="task-item">
-                        Complete Profile
-                    </li>
-                    <li class="task-item">
-                        Install Our Mobile App 
-                    </li>
-                </ul>
+            <div id="level-system">
+                <div class="circle-container">
+                    <svg class="progress-circle" width="120" height="120">
+                        <circle class="circle-bg" cx="60" cy="60" r="50"></circle>
+                        <circle class="circle-progress" cx="60" cy="60" r="50"></circle>
+                    </svg>
+                    <div class="circle-level">1</div>
+                </div>
+                <div id="xp-details">XP: 0 / 100</div>
+                <button id="earn-xp-button">Earn XP</button>
             </div>
         </aside>
     </div>

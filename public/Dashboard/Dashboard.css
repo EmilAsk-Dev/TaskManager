@@ -47,13 +47,14 @@ body {
 
 .app-container {
     display: grid;
-    grid-template-columns: var(--sidebar-width) var(--main-content-width) var(--right-sidebar-width);
-    grid-template-areas: "sidebar main rightsidebar"; /* Ensure this has only 3 columns */
+    grid-template-columns: var(--sidebar-width) minmax(0, var(--main-content-width)) var(--right-sidebar-width);
+    grid-template-areas: "sidebar main rightsidebar";
     min-height: 100vh;
-    width: 100%; /* Ensure the container uses full width */
-    grid-gap: 0; /* Remove any grid gaps between items */
+    width: 100%;
+    grid-gap: 0;
+    position: relative;
+    overflow-x: hidden;
 }
-
 /* Dark mode styles */
 body.dark-mode {
     background-color: var(--primary-bg);
@@ -100,6 +101,8 @@ body.dark-mode .dark-mode-toggle .toggle-circle {
     grid-area: sidebar;
     transition: background-color 0.3s ease;
 }
+
+
 .sidebar-header {
     display: flex;
     align-items: center;
@@ -282,6 +285,21 @@ body.dark-mode .dark-mode-toggle .toggle-circle {
     color: var(--text-primary);
 }
 
+.button{
+    padding: 10px 20px;
+    border: none;
+    background-color: #0079bf;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-primary);
+    align-items: center;
+    margin-bottom: 30px; /* Space below the button */
+}
+
+.add-workspace-button{
+    display: grid;
+}
+
 .icon-button {
     background: transparent;
     border: none;
@@ -433,12 +451,14 @@ h1 {
     font-size: 13px;
 }
 
-/* Profile Sidebar */
 .profile-sidebar {
     background-color: var(--sidebar-bg);
     padding: 16px;
     grid-area: rightsidebar;
-    width: 100%; /* This will help keep it confined to its area */
+    width: 100%;
+    transition: transform 0.3s ease, width 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 /* Profile Completion Section */
@@ -471,4 +491,96 @@ h1 {
 
 .check-icon {
     color: var(--success-green);
+}
+
+
+
+/* Media query for responsive sliding */
+@media only screen and (max-width: 1200px) {
+    .app-container {
+        grid-template-columns: var(--sidebar-width) calc(100% - var(--sidebar-width));
+        grid-template-areas: "sidebar main";
+    }
+
+    .profile-sidebar {
+        
+        top: 0;
+        right: 0;
+        
+        width: var(--right-sidebar-width);
+       
+        
+    }
+}
+
+
+/*xp and lvl*/
+
+#level-system {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+.circle-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.progress-circle {
+    transform: rotate(-90deg); /* Start progress from the top */
+    overflow: visible;
+}
+
+.circle-bg {
+    fill: none;
+    stroke: #e0e0e0;
+    stroke-width: 10;
+}
+
+.circle-progress {
+    fill: none;
+    stroke: #4caf50;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 314; /* Circumference of the circle: 2 * π * r */
+    stroke-dashoffset: 314; /* Start fully hidden */
+    transition: stroke-dashoffset 0.3s ease;
+}
+
+.circle-level {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+#xp-details {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+#earn-xp-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #0079bf;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+/* Additional media query for smaller screens */
+@media only screen and (max-width: 1200px) {
+    .profile-sidebar {
+        transform: translateX(100%);
+    }
 }
