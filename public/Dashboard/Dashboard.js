@@ -1,4 +1,8 @@
+
+
 document.addEventListener('DOMContentLoaded', () => {
+
+    
     // Sample data
     const favorites = [
         { name: "Marketing Campaign", type: "Board" },
@@ -158,6 +162,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('load', function() {
         document.body.classList.add('dark-mode');
     });
+
+
+    
 
     // Initialize everything
     (async ()=>{

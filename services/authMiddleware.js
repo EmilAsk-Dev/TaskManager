@@ -1,4 +1,4 @@
-const authService = require('./authService'); // This will call your service to interact with DB
+const userService = require('../services/userService'); 
 
 const authenticate = async (req, res, next) => {
     try {
@@ -9,7 +9,7 @@ const authenticate = async (req, res, next) => {
         }
         
         // Fetch user from the database (service layer)
-        const user = await authService.login(username, password);
+        const user = await userService.authenticateUser(username, password);
         
         // Check if user exists and password matches (plain text comparison)
         if (user) {
