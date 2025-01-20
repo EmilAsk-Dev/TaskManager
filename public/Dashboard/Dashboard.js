@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function populateWorkspaces() {
         
-        const res = await fetch('/api/v1/namespaces')
+        
+        const res = await fetch('/api/v1/workspace')
         const workspaces = await res.json()
 
         const workspacesList = document.getElementById('workspaces-list');

@@ -8,141 +8,105 @@
     
 </head>
 <body class="dark-mode">
-    <div class="app-container">
-        <!-- Left Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <img src="" alt="Logo" class="logo">
+        <div class="sidebar">
+            <div class="logo">
+                <img src="/api/placeholder/32/32" alt="Logo">
             </div>
-            
-            <nav class="sidebar-nav">
-                <ul class="nav-list">
-                    <div class="add-workspace-button">
-                        <BUTTon class="button">Create workspace</BUTTon>
-                    </div>
-                    
-                    <li class="nav-item">                        
-                        <div class="nav-header">
-                            <span class="icon">🏠</span>
-                            <span class="nav-title">Home</span>
-                            <span class="nav-arrow">▼</span>
-                        </div>
-                        <ul class="nav-dropdown">
-                            <li class="dropdown-item">Dashboard</li>
-                            <li class="dropdown-item">Overview</li>
-                            <li class="dropdown-item">My Tasks</li>
-                        </ul>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <div class="nav-header">
-                            <span class="icon">📝</span>
-                            <span class="nav-title">My Work</span>
-                            <span class="nav-arrow">▼</span>
-                        </div>
-                        <ul class="nav-dropdown">
-                            <li class="dropdown-item">All Tasks</li>
-                            <li class="dropdown-item">Completed</li>
-                            <li class="dropdown-item">In Progress</li>
-                        </ul>
-                    </li>
-        
-                    <li class="nav-item">
-                        <div class="nav-header">
-                            <span class="icon">⭐</span>
-                            <span class="nav-title">Favorites</span>
-                            <span class="nav-arrow">▼</span>
-                        </div>
-                        <ul class="nav-dropdown" id="favorites-list">
-                            <!-- Populated dynamically -->
-                        </ul>
-                    </li>
-        
-                    <li class="nav-item">
-                        <div class="nav-header">
-                            <span class="icon">📁</span>
-                            <span class="nav-title">Workspaces</span>
-                            <span class="nav-arrow">▼</span>
-                        </div>
-                        <ul class="nav-dropdown" id="workspaces-list">
-                            <!-- Populated dynamically -->
-                        </ul>
-                    </li>
-                </ul>
+            <button class="create-btn">Create Workspace</button>
+            <nav>
+                <a href="#" class="nav-item active">
+                    <img src="/api/placeholder/20/20" alt="Dashboard" class="nav-icon">
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item">
+                    <img src="/api/placeholder/20/20" alt="Tasks" class="nav-icon">
+                    My Tasks
+                </a>
+                <a href="#" class="nav-item">
+                    <img src="/api/placeholder/20/20" alt="Calendar" class="nav-icon">
+                    Calendar
+                </a>
+                <a href="#" class="nav-item">
+                    <img src="/api/placeholder/20/20" alt="Teams" class="nav-icon">
+                    Teams
+                </a>
             </nav>
-        </aside>
+        </div>
 
         <!-- Main Content -->
-        <main class="main-content">
-            <header class="top-header">
-                <div class="header-actions">
-                    <div class="header">
-                        <div class="header-left">
-                            <h2> welcome <%= user.username %></h2>
-                        </div>
-                        <div class="header-right">
-                            <button class="quick-search">Quick Search</button>
-                            <button id="darkModeToggle" class="dark-mode-toggle">
-                                <span class="toggle-circle"></span>
-                            </button>
-                            <button class="icon-button">🔔</button>
-                            <button class="icon-button">👤</button>
-                        </div>
+        <div class="main-content">
+            <header class="header">
+                <h1>Welcome back, User!</h1>
+                <div style="display: flex; align-items: center;">
+                    <input type="text" class="search-box" placeholder="Search...">
+                    <div class="notifications">
+                        <img src="/api/placeholder/24/24" alt="Notifications">
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="xp-progress">
+                        <div class="xp-bar"></div>
                     </div>
                 </div>
             </header>
 
-            <div class="content">
-                <section class="recently-visited">
-                    <h2>Recently Visited</h2>
-                    <div class="recent-cards" id="recentCardsContainer"></div>
-                </section>
-            </div>
-                        
-            <section class="update-feed">
-                <h2>Update feed (Inbox) <span class="badge">2</span></h2>
-                <div class="feed-items">
-                    <div class="feed-item">
-                        <div class="feed-avatar"></div>
-                        <div class="feed-content">
-                            <p>Invite your teammates and start collaborating</p>
-                            <div class="feed-actions">
-                                <button class="btn-secondary">No thanks</button>
-                                <button class="btn-primary">Invite</button>
-                            </div>
+            <div class="dashboard">
+                <!-- Stats Cards -->
+                <div class="stats-card">
+                    <h3>Tasks Due Today</h3>
+                    <div class="number">5</div>
+                </div>
+                <div class="stats-card">
+                    <h3>Completed</h3>
+                    <div class="number">12</div>
+                </div>
+                <div class="stats-card">
+                    <h3>Team Members</h3>
+                    <div class="number">8</div>
+                </div>
+                <div class="stats-card">
+                    <h3>Active Projects</h3>
+                    <div class="number">4</div>
+                </div>
+
+                <!-- Tasks Section -->
+                <div class="tasks-section">
+                    <h2 style="margin-bottom: 20px;">Today's Tasks</h2>
+                    <div class="task-card">
+                        <div>
+                            <h3>Complete dashboard design</h3>
+                            <p style="color: #8b8b8b;">Due in 3 hours</p>
+                        </div>
+                        <span class="priority-tag priority-high">High Priority</span>
+                    </div>
+                    <div class="task-card">
+                        <div>
+                            <h3>Team meeting</h3>
+                            <p style="color: #8b8b8b;">In 30 minutes</p>
+                        </div>
+                        <span class="priority-tag priority-medium">Medium Priority</span>
+                    </div>
+                </div>
+
+                <!-- Activity Feed -->
+                <div class="activity-feed">
+                    <h2 style="margin-bottom: 20px;">Recent Activity</h2>
+                    <div class="activity-item">
+                        <img src="/api/placeholder/40/40" alt="User" class="activity-avatar">
+                        <div>
+                            <p><strong>Alice</strong> completed "Design Review"</p>
+                            <small style="color: #8b8b8b;">2 minutes ago</small>
                         </div>
                     </div>
-                    <div class="feed-item">
-                        <div class="feed-avatar"></div>
-                        <div class="feed-content">
-                            <p>Roy Mann mentioned you in Task #123</p>
-                            <div class="feed-actions">
-                                <button class="btn-secondary">View</button>
-                            </div>
+                    <div class="activity-item">
+                        <img src="/api/placeholder/40/40" alt="User" class="activity-avatar">
+                        <div>
+                            <p><strong>Bob</strong> added a new task</p>
+                            <small style="color: #8b8b8b;">15 minutes ago</small>
                         </div>
                     </div>
                 </div>
-            </section>
-
-            
-
-            <!-- Right Sidebar moved inside main -->
-            
-        </main>
-        <aside class="profile-sidebar">
-            <div id="level-system">
-                <div class="circle-container">
-                    <svg class="progress-circle" width="120" height="120">
-                        <circle class="circle-bg" cx="60" cy="60" r="50"></circle>
-                        <circle class="circle-progress" cx="60" cy="60" r="50"></circle>
-                    </svg>
-                    <div class="circle-level">1</div>
-                </div>
-                <div id="xp-details">XP: 0 / 100</div>
-                <button id="earn-xp-button">Earn XP</button>
             </div>
-        </aside>
-    </div>
+        </div>
     <script src="dashBoard.js"></script>
     
 </body>

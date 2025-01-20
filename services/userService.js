@@ -12,7 +12,7 @@ async function createUser(username, email, passwordHash) {
       .input('PasswordHash', sql.NVarChar, passwordHash)
       .output('UserID', sql.Int)
       .execute('task.usp_CreateUser');
-
+    
     return result.output.UserID; // Returns the generated UserID
   } catch (err) {
     console.error('Error creating user:', err);

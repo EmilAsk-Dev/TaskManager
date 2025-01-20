@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #1a1a2e;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: #16213e;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+        }
+
+        .logo {
+            margin-bottom: 30px;
+        }
+
+        .create-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #0066ff;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+
+        .create-btn:hover {
+            background-color: #0052cc;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .nav-item:hover {
+            background-color: #1e2f4d;
+        }
+
+        .nav-item.active {
+            background-color: #1e2f4d;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+        }
+
+        /* Header */
+        .header {
+            background-color: #16213e;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .xp-progress {
+            width: 200px;
+            height: 20px;
+            background-color: #1e2f4d;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .xp-bar {
+            width: 30%;
+            height: 100%;
+            background-color: #0066ff;
+        }
+
+        /* Dashboard Grid */
+        .dashboard {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .stats-card {
+            background-color: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .stats-card h3 {
+            color: #8b8b8b;
+            margin-bottom: 10px;
+        }
+
+        .stats-card .number {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Tasks Section */
+        .tasks-section {
+            grid-column: span 3;
+            background-color: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .task-card {
+            background-color: #1e2f4d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            transition: all 0.2s ease;
+        }
+
+        .priority-tag {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        .priority-high {
+            background-color: #ff4d4d;
+            color: white;
+        }
+
+        .priority-medium {
+            background-color: #ffd700;
+            color: black;
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            background-color: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .activity-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .notifications {
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ff4d4d;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .search-box {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            background-color: #1e2f4d;
+            color: white;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="/api/placeholder/32/32" alt="Logo">
+        </div>
+        <button class="create-btn">Create Workspace</button>
+        <nav>
+            <a href="#" class="nav-item active">
+                <img src="/api/placeholder/20/20" alt="Dashboard" class="nav-icon">
+                Dashboard
+            </a>
+            <a href="#" class="nav-item">
+                <img src="/api/placeholder/20/20" alt="Tasks" class="nav-icon">
+                My Tasks
+            </a>
+            <a href="#" class="nav-item">
+                <img src="/api/placeholder/20/20" alt="Calendar" class="nav-icon">
+                Calendar
+            </a>
+            <a href="#" class="nav-item">
+                <img src="/api/placeholder/20/20" alt="Teams" class="nav-icon">
+                Teams
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="header">
+            <h1>Welcome back, User!</h1>
+            <div style="display: flex; align-items: center;">
+                <input type="text" class="search-box" placeholder="Search...">
+                <div class="notifications">
+                    <img src="/api/placeholder/24/24" alt="Notifications">
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="xp-progress">
+                    <div class="xp-bar"></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <!-- Stats Cards -->
+            <div class="stats-card">
+                <h3>Tasks Due Today</h3>
+                <div class="number">5</div>
+            </div>
+            <div class="stats-card">
+                <h3>Completed</h3>
+                <div class="number">12</div>
+            </div>
+            <div class="stats-card">
+                <h3>Team Members</h3>
+                <div class="number">8</div>
+            </div>
+            <div class="stats-card">
+                <h3>Active Projects</h3>
+                <div class="number">4</div>
+            </div>
+
+            <!-- Tasks Section -->
+            <div class="tasks-section">
+                <h2 style="margin-bottom: 20px;">Today's Tasks</h2>
+                <div class="task-card">
+                    <div>
+                        <h3>Complete dashboard design</h3>
+                        <p style="color: #8b8b8b;">Due in 3 hours</p>
+                    </div>
+                    <span class="priority-tag priority-high">High Priority</span>
+                </div>
+                <div class="task-card">
+                    <div>
+                        <h3>Team meeting</h3>
+                        <p style="color: #8b8b8b;">In 30 minutes</p>
+                    </div>
+                    <span class="priority-tag priority-medium">Medium Priority</span>
+                </div>
+            </div>
+
+            <!-- Activity Feed -->
+            <div class="activity-feed">
+                <h2 style="margin-bottom: 20px;">Recent Activity</h2>
+                <div class="activity-item">
+                    <img src="/api/placeholder/40/40" alt="User" class="activity-avatar">
+                    <div>
+                        <p><strong>Alice</strong> completed "Design Review"</p>
+                        <small style="color: #8b8b8b;">2 minutes ago</small>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <img src="/api/placeholder/40/40" alt="User" class="activity-avatar">
+                    <div>
+                        <p><strong>Bob</strong> added a new task</p>
+                        <small style="color: #8b8b8b;">15 minutes ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

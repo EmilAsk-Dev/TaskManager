@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const {authenticate} = require('../services/authMiddleware');
+const {authenticate} = require('../services/authMiddleware')
 
 
 router.get('/login', (req, res) => {
     if (req.session.user) {
         return res.redirect('/dashboard'); 
     }
-    res.render('Login', { user: req.session.user });
+    res.render('Login', { user: null });
 });
 
 router.post('/login', authenticate, (req, res) => {

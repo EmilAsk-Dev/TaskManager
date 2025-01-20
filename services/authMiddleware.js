@@ -1,4 +1,5 @@
-const userService = require('../services/userService'); 
+const userService = require('../services/userService');
+ 
 
 const authenticate = async (req, res, next) => {
     try {
@@ -9,21 +10,23 @@ const authenticate = async (req, res, next) => {
         }
         
         // Fetch user from the database (service layer)
-        const user = await userService.authenticateUser(username, password);
+        const users =  await userService.authenticateUser(username, password);
+        const user = users[0]
         
-        // Check if user exists and password matches (plain text comparison)
+        // Check if user exists and password matches
         if (user) {
-            // Store user details in session
             req.session.user = {
-                id: user.UserID,
-                username: user.Username,
-                email: user.Email,
+                UserID: user.UserID,
+                Username: user.Username,
+                Email: user.Email,
                 Role: user.RoleID,
-                roleName: user.RoleName
+                roleName: user.RoleName,  
+                CreatedAt: user.CreatedAt
             };
 
-            console.log('Authenticated user:', req.session.user);
-            return next(); // Proceed to the next middleware (or route handler)
+            
+            console.log(user);
+            return next();
         } else {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
@@ -35,6 +38,7 @@ const authenticate = async (req, res, next) => {
 
 const isAuth = async (req, res, next) => {
     if(req.session && req.session.user){
+        req.user = req.session.user;
         next()
     }
     else{        

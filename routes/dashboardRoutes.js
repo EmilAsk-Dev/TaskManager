@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
 const config = require('../services/dbConfig');
+const { getUserWorkspaces } = require('../services/workspaceService');
 
 // Route to display the dashboard
 router.get('/', async (req, res) => {
@@ -9,8 +10,11 @@ router.get('/', async (req, res) => {
         return res.redirect('/auth/login');
     }
 
-    res.render('Dashboard', { user: req.session.user });
-
+    const workspaces = await getUserWorkspaces(req.session.user.UserID)
+    res.render('Dashboard', {
+        user: req.session.user,
+        workspaces: workspaces,
+    });
 
     
     
@@ -21,13 +25,10 @@ router.get('/', async (req, res) => {
         const result = await pool.request()
             .input('userId', sql.Int, req.session.user.UserID)
             .query('SELECT * FROM Workspaces WHERE UserID = @userId');
-
+        
         const workspaces = result.recordset;
 
-        res.render('Dashboard', {
-            user: req.session.user,
-            workspaces: workspaces,
-        });
+        
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
         res.status(500).send('Server Error');
