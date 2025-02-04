@@ -51,7 +51,7 @@ body {
 
 /* Sidebar Styles */
 .sidebar {
-    width: 250px;
+    width: 275px;
     background-color: var(--sidebar-bg);
     padding: 20px;
     height: 100vh;
@@ -103,7 +103,7 @@ body {
 
 /* Main Content Area */
 .main-content {
-    margin-left: 250px;
+    margin-left: 275px;
     flex: 1;
 }
 
@@ -135,8 +135,12 @@ body {
     padding: 20px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 10% 45% 45%;
+    max-height: calc(100vh - 110px);
     gap: 20px;
 }
+
+
 
 .stats-card {
     background-color: var(--sidebar-bg);
@@ -154,16 +158,39 @@ body {
     font-weight: bold;
 }
 
+
+
+.recentworspace-section{
+    border-radius: 10px;
+    grid-column: span 2;    
+    background-color: var(--sidebar-bg);
+}
+
 /* Tasks Section */
 .tasks-section {
-    grid-column: span 3;
-    background-color:var(--sidebar-bg);
+    grid-column: span 1;
+    grid-row: span 2;
+    background-color: var(--sidebar-bg);
     padding: 20px;
     border-radius: 10px;
+    overflow: hidden;
+    padding: 20px;
+    
+    overflow-y: auto; /* Keep scroll functionality without showing scrollbars unless needed */
+}
+
+/* Hide the scrollbar */
+.tasks-section::-webkit-scrollbar {
+    display: none;
+}
+
+/* For Firefox */
+.tasks-section {
+    scrollbar-width: none; /* Hides the scrollbar in Firefox */
 }
 
 .task-card {
-    background-color: var();
+    border: 1px solid;
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 10px;
@@ -185,11 +212,16 @@ body {
 
 .priority-high {
     background-color: #ff4d4d;
-    color: white;
+    color: black;
 }
 
 .priority-medium {
     background-color: #ffd700;
+    color: black;
+}
+
+.priority-low {
+    background-color: #00c875;
     color: black;
 }
 
@@ -198,6 +230,9 @@ body {
     background-color: var(--sidebar-bg);
     padding: 20px;
     border-radius: 10px;
+    grid-row: span 2;
+    /* max-height: calc(100vh - 235px); */
+    
 }
 
 .activity-item {
@@ -240,4 +275,331 @@ body {
     background-color: #1e2f4d;
     color: white;
     margin-right: 20px;
+}
+
+body.dark-mode {
+    background-color: var(--primary-bg);
+    color: #ffffff;
+}
+
+.dark-mode-toggle {
+    width: 50px;
+    height: 25px;
+    background-color: #ccc;
+    border-radius: 25px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dark-mode-toggle .toggle-circle {
+    width: 15px;
+    height: 15px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+
+
+
+/**/
+.calendar-section{
+    grid-column: span 2;
+    background-color: var(--sidebar-bg);
+    padding: 20px;
+}
+
+.calendar-container {
+    width: 100%;
+    grid-column: span 2;
+    grid-row: span 2;
+    background: var(--sidebar-bg);
+    border-radius: 10px;
+    padding: 20px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.month-nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.nav-btn:hover {
+    background: #2d2e3a;
+}
+
+.view-toggle {
+    display: flex;
+    gap: 10px;
+}
+
+.view-btn {
+    background: #2d2e3a;
+    border: none;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.view-btn.active {
+    background: #3b82f6;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.weekday-header {
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    color: #9ca3af;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    background: #2d2e3a;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s;
+}
+
+.calendar-day:hover {
+    background: #3d3e4a;
+}
+
+.calendar-day.today {
+    background: #3b82f6;
+    color: white;
+}
+
+.calendar-day.has-tasks::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: #10b981;
+    border-radius: 50%;
+}
+
+.calendar-day.selected {
+    border: 2px solid #3b82f6;
+}
+
+.task-preview {
+    position: absolute;
+    background: #2d2e3a;
+    border-radius: 8px;
+    padding: 10px;
+    width: 200px;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.task-preview.visible {
+    display: block;
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-item {
+    padding: 5px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    font-size: 0.9em;
+}
+
+.task-item.high {
+    background: #ef444425;
+    color: #ef4444;
+}
+
+.task-item.medium {
+    background: #f59e0b25;
+    color: #f59e0b;
+}
+
+.task-item.low {
+    background: #10b98125;
+    color: #10b981;
+}
+/* Week view specific styles */
+.week-view {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: #1e2030;
+    border-radius: 12px;
+    padding: 0;
+    height: calc(100% - 60px); /* Account for header */
+}
+
+.week-header {
+    display: grid;
+    grid-template-columns: 80px repeat(7, 1fr);
+    padding: 12px 0;
+    border-bottom: 1px solid #2d2e3a;
+}
+
+.week-header-cell {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px;
+}
+
+.week-header-cell.date {
+    color: #fff;
+    font-weight: 600;
+}
+
+.week-body {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.time-slot {
+    display: grid;
+    grid-template-columns: 80px repeat(7, 1fr);
+    min-height: 60px;
+    border-bottom: 1px solid #2d2e3a;
+}
+
+.time-label {
+    padding: 8px;
+    color: #9ca3af;
+    font-size: 12px;
+    text-align: right;
+    padding-right: 16px;
+    align-self: start;
+    font-weight: 500;
+}
+
+.day-slot {
+    position: relative;
+    border-left: 1px solid #2d2e3a;
+    padding: 4px;
+    min-height: 60px;
+}
+
+.day-slot:hover {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.event {
+    background: #3b82f6;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    margin: 2px;
+    color: white;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.event.high {
+    background: #ef4444;
+}
+
+.event.medium {
+    background: #f59e0b;
+}
+
+.event.low {
+    background: #10b981;
+}
+
+/* Current time indicator */
+.current-time {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #3b82f6;
+    z-index: 1;
+}
+
+.current-time::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: -4px;
+    width: 10px;
+    height: 10px;
+    background: #3b82f6;
+    border-radius: 50%;
+}
+
+/* Today's column highlight */
+.day-slot.today {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+/* Empty state styling */
+.empty-slot {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4b5563;
+    font-size: 12px;
+}
+
+
+
+
+
+
+
+
+/* When the dark mode is toggled */
+body.dark-mode .dark-mode-toggle {
+    background-color: #4d4d4d;
+}
+
+body.dark-mode .dark-mode-toggle .toggle-circle {
+    transform: translateX(25px);
 }

@@ -10,24 +10,24 @@
 <body class="dark-mode">
         <div class="sidebar">
             <div class="logo">
-                <img src="/api/placeholder/32/32" alt="Logo">
+                <img src="" alt="Logo">
             </div>
             <button class="create-btn">Create Workspace</button>
             <nav>
                 <a href="#" class="nav-item active">
-                    <img src="/api/placeholder/20/20" alt="Dashboard" class="nav-icon">
+                    <img src="" alt="Dashboard" class="nav-icon">
                     Dashboard
                 </a>
                 <a href="#" class="nav-item">
-                    <img src="/api/placeholder/20/20" alt="Tasks" class="nav-icon">
+                    <img src="" alt="Tasks" class="nav-icon">
                     My Tasks
                 </a>
                 <a href="#" class="nav-item">
-                    <img src="/api/placeholder/20/20" alt="Calendar" class="nav-icon">
+                    <img src="" alt="Calendar" class="nav-icon">
                     Calendar
                 </a>
                 <a href="#" class="nav-item">
-                    <img src="/api/placeholder/20/20" alt="Teams" class="nav-icon">
+                    <img src="" alt="Teams" class="nav-icon">
                     Teams
                 </a>
             </nav>
@@ -38,9 +38,12 @@
             <header class="header">
                 <h1>Welcome back, User!</h1>
                 <div style="display: flex; align-items: center;">
+                    <button id="darkModeToggle" class="dark-mode-toggle">
+                                <span class="toggle-circle"></span>
+                            </button>
                     <input type="text" class="search-box" placeholder="Search...">
                     <div class="notifications">
-                        <img src="/api/placeholder/24/24" alt="Notifications">
+                        <img src="" alt="Notifications">
                         <span class="notification-badge">3</span>
                     </div>
                     <div class="xp-progress">
@@ -53,11 +56,11 @@
                 <!-- Stats Cards -->
                 <div class="stats-card">
                     <h3>Tasks Due Today</h3>
-                    <div class="number">5</div>
+                    <div class="number" id="TasksCount"></div>
                 </div>
                 <div class="stats-card">
                     <h3>Completed</h3>
-                    <div class="number">12</div>
+                    <div class="number" id="taskcompleted"></div>
                 </div>
                 <div class="stats-card">
                     <h3>Team Members</h3>
@@ -67,47 +70,60 @@
                     <h3>Active Projects</h3>
                     <div class="number">4</div>
                 </div>
-
+                
                 <!-- Tasks Section -->
-                <div class="tasks-section">
+                <div class="tasks-section" id="taskSection">
                     <h2 style="margin-bottom: 20px;">Today's Tasks</h2>
-                    <div class="task-card">
-                        <div>
-                            <h3>Complete dashboard design</h3>
-                            <p style="color: #8b8b8b;">Due in 3 hours</p>
+                    
+                </div>
+
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <div class="month-nav">
+                            <button class="nav-btn" id="prevBtn">←</button>
+                            <h2 id="currentMonth">February 2025</h2>
+                            <button class="nav-btn" id="nextBtn">→</button>
                         </div>
-                        <span class="priority-tag priority-high">High Priority</span>
-                    </div>
-                    <div class="task-card">
-                        <div>
-                            <h3>Team meeting</h3>
-                            <p style="color: #8b8b8b;">In 30 minutes</p>
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="month">Month</button>
+                            <button class="view-btn" data-view="week">Week</button>
                         </div>
-                        <span class="priority-tag priority-medium">Medium Priority</span>
                     </div>
+                    <div id="calendar"></div>
                 </div>
 
                 <!-- Activity Feed -->
                 <div class="activity-feed">
                     <h2 style="margin-bottom: 20px;">Recent Activity</h2>
                     <div class="activity-item">
-                        <img src="/api/placeholder/40/40" alt="User" class="activity-avatar">
+                        <img src="" alt="User" class="activity-avatar">
                         <div>
                             <p><strong>Alice</strong> completed "Design Review"</p>
                             <small style="color: #8b8b8b;">2 minutes ago</small>
                         </div>
                     </div>
                     <div class="activity-item">
-                        <img src="/api/placeholder/40/40" alt="User" class="activity-avatar">
+                        <img src="" alt="User" class="activity-avatar">
                         <div>
                             <p><strong>Bob</strong> added a new task</p>
                             <small style="color: #8b8b8b;">15 minutes ago</small>
                         </div>
                     </div>
                 </div>
+                <div class="recentworspace-section"></div>
             </div>
         </div>
     <script src="dashBoard.js"></script>
     
+        <!-- activity template
+        <div class="activity-item">
+                        <img src="" alt="User" class="activity-avatar">
+                        <div>
+                            <p><strong>Alice</strong> completed "Design Review"</p>
+                            <small style="color: #8b8b8b;">2 minutes ago</small>
+                        </div>
+                    </div>
+        -->
+
 </body>
 </html>
